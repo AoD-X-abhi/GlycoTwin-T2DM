@@ -4,7 +4,7 @@ A data-driven **Digital Twin platform** for Type 2 Diabetes management and glyce
 
 ---
 
-## 🚀 Key Modules
+## Key Modules
 
 1. **Postprandial Glycemic Response (PPGR) Predictor**: Forecasts peak glucose levels, time-to-peak, and post-meal Area Under the Curve (AUC) for 2–4 hour windows using dynamic meal inputs and clinical baselines.
 2. **Gut Microbiome-Guided Personalization Engine**: Integrates gut bacterial profiles (1,979 microbial features) and health scores to personalize glycemic predictions based on unique microbiome signatures.
@@ -14,19 +14,7 @@ A data-driven **Digital Twin platform** for Type 2 Diabetes management and glyce
 
 ---
 
-## 🛠️ Tech Stack
-
-* **Language & Runtime:** Python 3.10+
-* **Data Processing:** `pandas`, `numpy`, `scipy`
-* **Machine Learning:** `xgboost`, `catboost`, `lightgbm`, `scikit-learn`
-* **Deep Learning:** `PyTorch` / `TensorFlow` (LSTMs, GRUs, Transformers, Vision models)
-* **Microbiome Analysis:** Dimensionality reduction via `PCA`, `UMAP`, and Autoencoders
-* **Causal Inference:** `DoWhy`, `EconML`
-* **Dashboard / UI:** `Streamlit` / `Gradio`
-
----
-
-## 📅 Project Roadmap
+## Project Roadmap
 
 ```mermaid
 graph TD
@@ -38,7 +26,7 @@ graph TD
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 Digital-Twin-for-Diabetes/
@@ -51,7 +39,7 @@ Digital-Twin-for-Diabetes/
 
 ---
 
-## 💻 Getting Started
+## Getting Started
 
 ### 1. Prerequisites
 - Python 3.10+
@@ -61,7 +49,7 @@ Digital-Twin-for-Diabetes/
 
 ```bash
 # Clone the repository
-git clone https://github.com/<YOUR-USERNAME>/Digital-Twin-for-Diabetes.git
+git clone https://github.com/AoD-X-abhi/Digital-Twin-for-Diabetes.git
 cd Digital-Twin-for-Diabetes
 
 # Create and activate virtual environment
