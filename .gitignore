@@ -8,6 +8,12 @@ env/
 __pycache__/
 *.py[cod]
 
+# Datasets and processed files
+CGMacros/
+data/processed/*.csv
+data/processed/*.npz
+!data/processed/.gitkeep
+
 # TeX / LaTeX generated files
 *.aux
 *.log
@@ -22,3 +28,4 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+

@@ -1,0 +1,310 @@
+\documentclass[12pt]{article}
+
+\usepackage[
+    a4paper,
+    left=0.4in,
+    right=0.4in,
+    top=1in,
+    bottom=1in
+]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xltabular}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{hyperref}
+
+\definecolor{lightgreen}{RGB}{85, 190, 85}
+\definecolor{linkblue}{RGB}{51, 153, 255}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=linkblue,
+    urlcolor=linkblue,
+}
+
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\begin{center}
+    \Large \textsc{\textbf{Towards Intelligent Diabetes Care: A Multimodal Digital Twin for Blood Glucose Prediction and Personalized Intervention}}
+\end{center}
+\vspace{-0.2cm}
+\noindent\rule{\textwidth}{0.8pt}
+\vspace{0.1cm}
+\noindent\textcolor{lightgreen}{\textbf{C 14 - Project Phase I}} \hfill \textcolor{lightgreen}{\textbf{Digital Health}}
+\vspace{0.8cm}
+
+\section*{Abstract}
+Type 2 Diabetes (T2D) is a complex metabolic condition characterized by progressive insulin resistance and beta-cell dysfunction. While dietary modification is a cornerstone of management, traditional clinical approaches---such as uniform low-calorie or low-carbohydrate plans---often fail because they overlook the highly individual nature of postprandial glycemic responses (PPGRs). To address this limitation, this study presents a machine-learning-powered Digital Twin (DT) framework designed to predict and modulate personalized PPGRs. Using the multimodal CGMacros dataset from 45 participants, our framework constructs virtual metabolic profiles by integrating continuous time-series data (from dual CGMs and physical activity trackers) with baseline clinical blood panels and gut microbiome characteristics (including 1,979 bacterial features and 22 gut health indices). The resulting predictive model enables the Digital Twin to run counterfactual ``what-if'' simulations, evaluating how specific changes in meal macronutrient ratios or postprandial physical activity timing impact an individual's glucose excursions. By translating these complex physiological interactions into tailored lifestyle guidance, this Digital Twin platform provides personalized recommendations aimed at enhancing insulin sensitivity, mitigating hyperinsulinemia, and supporting the long-term remission of Type 2 Diabetes.
+
+\vspace{0.5cm}
+
+\section{Problem Statement}
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item - {Failure of ``One-Size-Fits-All'' Diets:} Generic low-calorie or low-carb diets ignore individual metabolic differences. Different patients experience completely different blood sugar spikes after eating the exact same food.
+    \item - {Reactive Management Over Proactive Care:} Current diabetes care is reactive. Lifestyle adjustments are made only \emph{after} harmful blood sugar spikes occur. Patients cannot simulate the glycemic impact of planned meals and exercise beforehand.
+    \item - {Fragmented Data Integration:} Existing prediction models rely solely on continuous glucose monitor history. They fail to combine key variables like physical activity, blood chemistry, and gut microbiome data into a single predictor.
+\end{itemize}
+
+\vspace{2.5cm}
+
+\section{Literature Review}
+
+\subsection{Context and Scope}
+
+This literature review is framed around the following core areas:
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item \textbf{Core Technologies:} Examines recent advancements in Continuous Glucose Monitoring (CGM), Artificial Intelligence (AI), Digital Twin technology, and predictive healthcare systems for diabetes management.
+    \item \textbf{Data Integration:} Focuses on the integration of multimodal patient data, including physiological measurements, wearable sensor data, clinical records, lifestyle information, and time-series glucose readings.
+    \item \textbf{System Development:} Aims to understand how these multimodal inputs are utilized to develop intelligent Digital Twin frameworks.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\subsection{Selection Criteria}
+
+The literature included in this review was selected based on the following parameters:
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item \textbf{Publication Quality:} Consists of recent peer-reviewed journal articles published in reputed Scopus-indexed journals, with a strong emphasis on Q1 and Q2 publications.
+    \item \textbf{Topical Relevance:} Prioritizes studies focusing on Digital Twin architectures, CGM systems, wearable biosensors, and multimodal healthcare data integration.
+    \item \textbf{Algorithmic Focus:} Targets research applying machine learning, deep learning, and predictive glucose forecasting methodologies.
+    \item \textbf{Data Quality:} Prefers studies that utilize real-world clinical datasets, wearable sensor data, and advanced temporal learning models.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\subsection{Goal}
+
+The primary objectives of this literature review are to:
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item \textbf{Analyze:} Critically evaluate existing Digital Twin technologies, AI-assisted biosensing platforms, and predictive glucose forecasting approaches.
+    \item \textbf{Identify Gaps:} Highlight the strengths, limitations, and current research gaps in existing predictive methodologies.
+    \item \textbf{Establish Foundation:} Create a strong theoretical and architectural justification for the proposed project.
+    \item \textbf{Support Development:} Inform the design of an intelligent, multimodal, deep learning-based Digital Twin capable of accurately forecasting blood glucose levels and aiding personalized clinical decision-making.
+\end{itemize}
+
+\vspace{1.5cm}
+
+\subsection{Literature Review Matrix}
+
+{
+\fontsize{10pt}{12pt}\selectfont
+\renewcommand{\arraystretch}{1.5}
+\rowcolors{2}{gray!05}{white}
+
+\begin{xltabular}{\textwidth}{@{} >{\hsize=0.6\hsize}L *{6}{>{\hsize=1.06\hsize}L} @{}}
+
+    \caption{\textbf{Literature Review Matrix for Digital Twin and Predictive Healthcare}}
+    \label{tab:lit_review} \\
+    \toprule
+    \rowcolor{gray!15}
+    \textbf{Author(s) \& Year} &
+    \textbf{Objective / Problem} &
+    \textbf{Datasets \& Inputs} &
+    \textbf{Methodology \& Algorithms} &
+    \textbf{Key Findings} &
+    \textbf{Limitations \& Gaps} &
+    \textbf{Relevance to Project} \\
+    \midrule
+    \endfirsthead
+
+    \caption[]{\textbf{Literature Review Matrix for Digital Twin and Predictive Healthcare} (Continued)} \\
+    \toprule
+    \rowcolor{gray!15}
+    \textbf{Author(s) \& Year} &
+    \textbf{Objective / Problem} &
+    \textbf{Datasets \& Inputs} &
+    \textbf{Methodology \& Algorithms} &
+    \textbf{Key Findings} &
+    \textbf{Limitations \& Gaps} &
+    \textbf{Relevance to Project} \\
+    \midrule
+    \endhead
+
+    \bottomrule
+    \multicolumn{7}{r}{\textit{Continued on next page...}} \\
+    \endfoot
+
+    \bottomrule
+    \endlastfoot
+
+    \textbf{Arshad et al. (2026)}~\cite{arshad2026beyond} \newline \href{https://www.scopus.com/pages/publications/105042843258?origin=resultslist}{\textcolor{linkblue}{\textit{Link to Paper}}} &
+    To review emerging multi-analyte biosensing technologies and the integration of AI for next-generation diabetes management, including Digital Twin systems. &
+    \textbf{N/A (Review)} \newline \newline Reviews studies involving CGM, multi-analyte biomarkers (ketones, lactate, insulin), wearable biosensors, and lifestyle data. &
+    Comprehensive review of recent advances in electrochemical/optical biosensors, AI-assisted glucose prediction, and smart closed-loop insulin delivery. &
+    Integrating multi-analyte wearables with AI has strong potential to improve continuous monitoring, predictive analytics, and future Digital Twin applications. &
+    Being a review, it lacks dataset preprocessing, model development, algorithm comparison, and quantitative performance metrics. &
+    Provides a comprehensive conceptual architecture illustrating how wearables and AI integrate, serving as a theoretical foundation for the proposed model. \\
+
+    \textbf{Olawade et al. (2026)}~\cite{olawade2026digital} \newline \href{https://www.scopus.com/pages/publications/105027272493?origin=resultslist}{\textcolor{linkblue}{\textit{Link to Paper}}} &
+    To critically evaluate the current state, applications, challenges, and future potential of digital twin (DT) technology in predicting and proactively managing diabetes. &
+    \textbf{N/A (Review)} \newline \newline Synthesizes secondary data from literature (2015--2024) utilizing CGM metrics, wearable data (activity, heart rate), clinical records, and social determinants. &
+    Narrative review and thematic analysis. Critically synthesizes and compares methodological approaches, performance metrics, and algorithmic structures across existing studies. &
+    DT models show high accuracy for type 2 diabetes risk prediction (AUC 0.84--0.92) and short-term glucose forecasting. Closed-loop insulin systems show high clinical maturity. &
+    As a narrative review, it lacks a formal quantitative meta-analysis. Highlights that most applications are proof-of-concept with gaps in data interoperability, bias mitigation, and clinical validation. &
+    Outlines technical capabilities and implementation barriers for predictive health models, providing a strategic blueprint for integrating multi-source data and mitigating algorithmic bias. \\
+
+    \textbf{Kiran et al. (2026)}~\cite{kiran2026digital} \newline \href{https://www.scopus.com/pages/publications/105033121198?origin=resultslist}{\textcolor{linkblue}{\textit{Link to Paper}}} &
+    To design a scalable DT framework predicting T2DM onset and simulating interventions using only retrospective lifestyle data, bypassing the need for continuous sensor inputs. &
+    UK Biobank data (n=19,774) followed up to 17 years. \newline \newline Inputs include demographics, behavioral patterns, diet, and psychosocial stressors (loneliness, insomnia). &
+    Data clustering for outlier removal. Penalized Cox proportional hazards model for survival analysis, and DoWhy framework (DAGs, causal modeling) for counterfactual simulations. &
+    Achieved predictive C-index of 0.90. Combined psychosocial stressors increased absolute T2DM risk by $\sim$78 percentage points. Simulating improvements reduced risk by 11.6 points. &
+    Relies on self-reported, retrospective data susceptible to reporting bias. Treats dietary habits as static baselines and is vulnerable to unmeasured confounding variables. &
+    Provides an architectural blueprint for developing offline, simulation-driven DTs that integrate multimodal behavioral data and combine survival analysis with causal inference. \\
+    
+    \textbf{Shamanna et al. (2024)}~\cite{shamanna2024personalized} \newline \href{https://www.scopus.com/pages/publications/85211190268?origin=resultslist}{\textcolor{linkblue}{\textit{Link to Paper}}} &
+    To predict and modulate postprandial glycemic responses (PPGRs) in Type 2 Diabetes patients to facilitate sustainable disease remission. &
+    Clinical dataset of 319 patients. Multimodal inputs including CGM, physical activity, sleep patterns, dietary logs, and baseline clinical parameters (HbA1c, lipids). &
+    Employed hybrid machine learning using Gradient Boosting (CatBoost) for static features and LSTM networks for temporal data. Generated automated, real-time dietary categorizations. &
+    Digital Twin group achieved a 72.7\% T2DM remission rate at 1 year, alongside significant improvements in HbA1c (dropped to 6.1\%), liver fat, and blood pressure. &
+    System efficacy heavily relies on continuous patient compliance for accurate dietary and activity logging. Generalizability across varying digital literacy levels requires validation. &
+    Demonstrates the clinical viability of integrating CGM and wearable data into a predictive Digital Twin, validating the use of hybrid LSTM/Gradient Boosting models for real-time intervention. \\
+
+    \textbf{Zhang et al. (2024)}~\cite{zhang2024framework} \newline \href{https://www.researchgate.net/publication/378155858_A_framework_towards_digital_twins_for_type_2_diabetes}{\textcolor{linkblue}{\textit{Link to Paper}}} &
+    To design a DT framework for T2DM that integrates machine learning with a biomedical knowledge graph to forecast disease progression and interpret predictive features. &
+    Longitudinal Arivale dataset (n=1,131). Multimodal inputs include 1,042 blood features (262 proteins, 710 metabolites) and 70 clinical variables. &
+    L1-regularized logistic regression for binary classification of clinical changes. Used SPOKE knowledge graph (Steiner tree and PageRank algorithms) to map and explain AI-weighted features. &
+    Multiomic data improved predictive accuracy over purely clinical data. Knowledge graphs successfully identified molecular pathways linking AI-selected proteins to T2DM progression and drug targets. &
+    Dataset consisted mostly of generally healthy participants, limiting applicability to advanced T2DM. Model relies on short-term data (6-12 months) and currently lacks dynamic mechanistic modeling. &
+    Provides a concrete framework for using knowledge graphs to solve the 'black-box' interpretability problem in AI-based Digital Twins, enriching model outputs with biological context. \\
+
+\end{xltabular}
+}
+
+\vspace{4cm}
+
+\section{Dataset Description: \href{https://physionet.org/content/cgmacros/1.0.0/}{\textcolor{linkblue}{CGMacros}}}
+
+\subsection{About Data}
+We present CGMacros, a dataset containing multimodal information from two continuous glucose monitors (CGM), food macronutrients, food photographs, and physical activity, in addition to anonymized participant demographics, anthropometric measurements and health parameters from blood analyses and gut microbiome profiles. CGMacros contains data from 45 study participants (15 healthy adults, 16 with pre-diabetes, and 14 with Type 2 diabetes) who consumed meals with varying and known macronutrient compositions in a free-living setting for ten consecutive days. To our knowledge, this is the first database of its kind to be made publicly available. CGMacros, and larger publicly available datasets that we hope may follow, are essential to democratize academic research in personalized nutrition and algorithmic approaches to automated diet monitoring.
+
+\subsection{Participant Cohort and Stratification}
+Forty-five participants completed the study, with ages ranging from 18 to 69 years and a body mass index (BMI) between 21 and 46~kg/m$^2$. All participants were recruited between 2021 and 2024. The cohort is stratified into three groups based on glycated hemoglobin (HbA1c) levels:
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item \textbf{Healthy Adults ($N=15$):} No pre-existing diabetes, defined by $\text{HbA1c} < 5.7\%$.
+    \item \textbf{Pre-diabetes ($N=16$):} Defined by $5.7\% \le \text{HbA1c} \le 6.4\%$.
+    \item \textbf{Type 2 Diabetes ($N=14$):} Defined by $\text{HbA1c} > 6.4\%$.
+\end{itemize}
+
+A detailed breakdown of the cohort parameters is summarized in Table~\ref{tab:cohort_demographics}.
+
+\begin{table}[H]
+    \centering
+    \caption{\textbf{CGMacros Participant Cohort Characterization}}
+    \label{tab:cohort_demographics}
+    \renewcommand{\arraystretch}{1.3}
+    \rowcolors{2}{gray!05}{white}
+    \begin{tabular}{lccl}
+        \toprule
+        \rowcolor{gray!15}
+        \textbf{Clinical Stratum} & \textbf{Count ($N$)} & \textbf{HbA1c Criteria} & \textbf{Baseline Parameters} \\
+        \midrule
+        Healthy Control & 15 & $\text{HbA1c} < 5.7\%$ & Age: 18--69 years \\
+        Pre-diabetes & 16 & $5.7\% \le \text{HbA1c} \le 6.4\%$ & BMI: 21--46~kg/m$^2$ \\
+        Type 2 Diabetes (T2D) & 14 & $\text{HbA1c} > 6.4\%$ & Recruitment: 2021--2024 \\
+        \midrule
+        \textbf{Total Study Population} & \textbf{45} & \textbf{---} & \textbf{10-day Monitoring Period} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Data Modalities and Continuous Measurements}
+The CGMacros dataset comprises time-series data captured in free-living environments, combining continuous physiology and lifestyle parameters. For each of the 45 participants, a main CSV file (\texttt{CGMacros-0YY.csv}) contains synchronized measurements recorded at 1-minute intervals. 
+The variables recorded per minute-interval include:
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item \textbf{Continuous Glucose Monitoring (CGM):} Real-time glucose readings from two distinct CGM sensors worn concurrently.
+    \item \textbf{Physical Activity:} Step counts and related movement logs captured via a Fitbit activity tracker.
+    \item \textbf{Dietary Ingestion Logs:} At the exact timestamp of meal consumption, the corresponding row reports:
+    \begin{itemize}[leftmargin=*, noitemsep]
+        \item {Macronutrients:} Carbohydrates (g), Protein (g), Fat (g), and Fiber (g).
+        \item {Energy Intake:} Total caloric content (kcal).
+        \item {Meal Classification:} Type of meal (Breakfast, Junk, or Dinner).
+        \item {Photographic Reference:} File path to the corresponding meal photograph.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Supplementary Biological and Microbiome Data}
+Baseline biological, demographic, and microbiome profiles collected on the first day of the study are provided in three supplementary files:
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item \textbf{{bio.csv}:} Demographics, anthropometrics (height, weight, BMI), a comprehensive blood chemistry panel (lipid profile, insulin, fasting glucose, HbA1c), and three finger-stick glucose measurements.
+    \item \textbf{{microbs.csv}:} Consolidated presence/absence matrix ($1$ or $0$) for 1,979 gut bacteria identified via stool samples.
+    \item \textbf{{gut\_health\_test.csv}:} 22 gut health scores (e.g., gut diversity, metabolic fitness) graded ordinally as \texttt{Good}, \texttt{Average}, or \texttt{Not Optimal}~\cite{tily2022overall}.
+\end{itemize}
+
+\vspace{0.8cm}
+
+\begin{thebibliography}{9}
+\bibitem{arshad2026beyond}
+F. Arshad, N. T. Beigh, N. Alcheikh, and G. A. Naikoo, 
+``Beyond glucose monitoring: Multi-analyte biosensing and AI-integrated wearable platforms for next-generation diabetes management,'' 
+\emph{Sensors and Actuators Reports}, vol. 12, p. 100481, 2026. 
+\href{https://doi.org/10.1016/j.seares.2025.100481}{DOI: 10.1016/j.seares.2025.100481}.
+
+\bibitem{olawade2026digital}
+D. B. Olawade, R. C. Owhonda, J. O. Alabi, E. Egbon, R. I. A. Daniel, and O. J. Bello, 
+``Digital twin paradigm in diabetes prediction and management,'' 
+\emph{Diabetes Research and Clinical Practice}, vol. 231, p. 113075, Jan. 2026. 
+\href{https://doi.org/10.1016/j.diabres.2025.113075}{DOI: 10.1016/j.diabres.2025.113075}.
+
+\bibitem{kiran2026digital}
+M. Kiran, Y. Xie, G. Ball, R. Schutte, N. Anjum, and B. Pierscionek, 
+``A digital twin framework for predicting and simulating type 2 diabetes onset using retrospective lifestyle data,'' 
+\emph{Frontiers in Digital Health}, vol. 8, p. 1710829, 2026. 
+\href{https://doi.org/10.3389/fdgth.2026.1710829}{DOI: 10.3389/fdgth.2026.1710829}.
+
+\bibitem{shamanna2024personalized}
+P. Shamanna, S. Joshi, M. Thajudeen, L. Shah, T. Poon, M. Mohamed, and J. Mohammed, 
+``Personalized nutrition in type 2 diabetes remission: application of digital twin technology for predictive glycemic control,'' 
+\emph{Frontiers in Endocrinology}, vol. 15, p. 1485464, Nov. 2024. 
+\href{https://doi.org/10.3389/fendo.2024.1485464}{DOI: 10.3389/fendo.2024.1485464}.
+
+\bibitem{zhang2024framework}
+Y. Zhang, G. Qin, B. Aguilar, N. Rappaport, J. T. Yurkovich, L. Pflieger, S. Huang, L. Hood, and I. Shmulevich, 
+``A framework towards digital twins for type 2 diabetes,'' 
+\emph{Frontiers in Digital Health}, vol. 6, p. 1336050, Jan. 2024. 
+\href{https://doi.org/10.3389/fdgth.2024.1336050}{DOI: 10.3389/fdgth.2024.1336050}.
+
+\bibitem{gayathri2022framework}
+R. Gayathri, B. B. Pati, T. Singh, and R. R. Nair, 
+``A Framework for the prediction of Diabtetes Mellitus using Hyper-Parameter tuned XGBoost Classifier,'' 
+in \emph{Proceedings of the 2022 13th International Conference on Computing Communication and Networking Technologies (ICCCNT)}, Kharagpur, India, Oct. 2022, pp. 1--6. 
+\href{https://doi.org/10.1109/ICCCNT54827.2022.9984315}{DOI: 10.1109/ICCCNT54827.2022.9984315}.
+
+\bibitem{padmavilochanan2023personalized}
+D. Padmavilochanan, R. K. Pathinarupothi, K. A. U. Menon, H. Kumar, R. Guntha, M. V. Ramesh, and P. V. Rangan, 
+``Personalized diabetes monitoring platform leveraging IoMT and AI for non-invasive estimation,'' 
+\emph{Smart Health}, vol. 30, p. 100428, Dec. 2023. 
+\href{https://doi.org/10.1016/j.smhl.2023.100428}{DOI: 10.1016/j.smhl.2023.100428}.
+
+\bibitem{sivaranjani2021diabetes}
+S. Sivaranjani, S. Ananya, J. Aravinth, and R. Karthika, 
+``Diabetes Prediction using Machine Learning Algorithms with Feature Selection and Dimensionality Reduction,'' 
+in \emph{Proceedings of the 2021 7th International Conference on Advanced Computing and Communication Systems (ICACCS)}, Wrexham, UK, Mar. 2021, pp. 141--146. 
+\href{https://doi.org/10.1109/ICACCS51430.2021.9441865}{DOI: 10.1109/ICACCS51430.2021.9441865}.
+
+\bibitem{aayush2023diabetic}
+A. A. A. Aayush, J. Sundaram, S. Devaraju, S. Jayaprakash, H. Anandaram, and C. Manivasagan, 
+``Diabetic Disease Prediction Using Machine Learning Models and Algorithms for Early Classification and Diagnosis Assessment,'' 
+in \emph{Machine Learning and Deep Learning Techniques for Medical Image Recognition}, 1st ed., B. O. Soufiene and C. Chakraborty, Eds. London, UK: CRC Press, 2023, ch. 13, pp. 1--28. 
+\href{https://doi.org/10.1201/9781032416168-13}{DOI: 10.1201/9781032416168-13}.
+
+\bibitem{cgmacros2025}
+R. Gutierrez-Osuna, D. Kerr, B. Mortazavi, and A. Das, 
+``CGMacros: a scientific dataset for personalized nutrition and diet monitoring (version 1.0.0),'' 
+\emph{PhysioNet}, 2025. 
+\href{https://doi.org/10.13026/3z8q-x658}{DOI: 10.13026/3z8q-x658}.
+
+\bibitem{tily2022overall}
+H. Tily, E. Patridge, Y. Cai, et al., 
+``Gut Microbiome Activity Contributes to Prediction of Individual Variation in Glycemic Response in Adults,'' 
+\emph{Diabetes Therapy}, vol. 13, no. 1, pp. 89--111, 2022. 
+\href{https://doi.org/10.1007/s13300-021-01174-z}{DOI: 10.1007/s13300-021-01174-z}.
+\end{thebibliography}
+
+\end{document}

@@ -14,38 +14,58 @@ A data-driven **Digital Twin platform** for Type 2 Diabetes management and glyce
 
 ---
 
-## Project Roadmap
+# Personalized Digital Twin for Type 2 Diabetes (T2D)
 
-```mermaid
-graph TD
-    A[Phase 1: EDA & Alignment] --> B[Phase 2: Feature Engineering & Baselines]
-    B --> C[Phase 3: Time-Series Deep Learning]
-    C --> D[Phase 4: Microbiome Integration]
-    D --> E[Phase 5: Dashboard & Deployment]
-```
+A data-driven **Digital Twin platform** for Type 2 Diabetes management and glycemic forecasting, built using the **CGMacros** dataset. This system integrates Continuous Glucose Monitoring (CGM) time-series data, physical activity logs, dietary macronutrient tracking, clinical metadata, and gut microbiome profiles to deliver real-time personalized glucose forecasting and causal "What-If" scenario simulations.
 
 ---
 
-## Repository Structure
+## 📌 Repository Structure
 
 ```
 Digital-Twin-for-Diabetes/
-├── Literature_Review_Major_Project.pdf   # Major project research review (PDF)
-├── Literature_Review_Major_Project.tex   # LaTeX source for literature review
-├── Project_Modules_and_Phases.md         # Detailed module design and project roadmap
-├── .gitignore                             # Ignored files (virtual environments, cache, build artifacts)
-└── README.md                             # Project documentation
+├── notebooks/
+│   ├── 01_EDA_and_Microbiome_PCA.ipynb              # Exploratory data analysis, wearable alignment & gut PCA
+│   ├── 02_Postprandial_Glucose_Prediction.ipynb     # Tabular ML predictors (XGBoost, LightGBM, CatBoost)
+│   └── 03_Deep_Learning_Continuous_Glucose_Forecasting.ipynb # PyTorch multi-horizon trajectory forecasting (LSTM, GRU, MLP)
+├── src/
+│   ├── preprocess.py                                 # Continuous time-series cleaning & meal event extraction
+│   ├── dataset_dl.py                                 # PyTorch sequence extraction & DataLoader pipeline
+│   └── models_dl.py                                  # PyTorch MLP, LSTM, and GRU forecasters with context fusion
+├── Project_Modules_and_Phases.md                     # Detailed module design and project roadmap
+├── requirements.txt                                  # Environment dependencies
+└── README.md                                         # Project documentation
 ```
 
 ---
 
-## Getting Started
+## 🚀 Accomplishments & Benchmarks
+
+### 1. Data Pipeline & Alignment (`src/preprocess.py`)
+- Cleaned 1-minute resolution dual continuous glucose sensor readings (`Libre GL` and `Dexcom GL` fused into `Unified GL`).
+- Windowed **1,637 valid meal events** across **45 participants**, linking 60-minute pre-meal history to 120-minute post-meal trajectories.
+
+### 2. Microbiome & Multimodal Feature Engineering (`notebooks/01_EDA_and_Microbiome_PCA.ipynb`)
+- Reduced **1,979 sparse binary gut bacteria species** to 8 dense Principal Components using PCA.
+- Combined meal macronutrients, pre-meal wearable statistics, clinical baselines (HbA1c, BMI, fasting insulin), 22 gut health test scores, and microbiome PCA components into a master dataset.
+
+### 3. Tabular Machine Learning Predictors (`notebooks/02_Postprandial_Glucose_Prediction.ipynb`)
+- Evaluated models across 5-Fold Group K-Fold Cross-Validation (unseen subject evaluation).
+- `LightGBM` / `CatBoost` achieved $R^2 \approx 0.50$ and $MAE \approx 23.9$ mg/dL for postprandial peak glucose prediction.
+
+### 4. Deep Learning Multi-Horizon Trajectory Forecasting (`notebooks/03_Deep_Learning_Continuous_Glucose_Forecasting.ipynb`)
+- Built PyTorch **MLP**, **LSTM**, and **GRU** neural networks to forecast the **full 120-minute continuous postprandial glucose curve** (sampled every 5 minutes = 24 forecast steps).
+- Achieved **22.16 mg/dL out-of-subject trajectory MAE** across all 24 forecasting horizons.
+
+---
+
+## 🛠️ Getting Started
 
 ### 1. Prerequisites
 - Python 3.10+
 - Git
 
-### 2. Setup Virtual Environment
+### 2. Setup Virtual Environment & Dependencies
 
 ```bash
 # Clone the repository
@@ -56,10 +76,13 @@ cd Digital-Twin-for-Diabetes
 python -m venv .venv
 
 # On Windows (PowerShell):
-.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 
 # On Linux/macOS:
 source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
 ---
@@ -67,3 +90,4 @@ source .venv/bin/activate
 ## 📝 License & References
 
 This project is developed as part of the **Major Project for B.Tech Semester 7**. Data derived from the **CGMacros** study.
+
