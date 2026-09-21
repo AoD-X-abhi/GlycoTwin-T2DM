@@ -107,8 +107,11 @@ def load_and_preprocess_sequences(
             if len(target_seq) != (post_window_mins // downsample_factor):
                 continue
                 
-            # Combine dynamic pre-sequence (60, 3)
+            # Dynamic pre-sequence (60, 3) -> [Unified GL, HR, METs]
             seq_matrix = np.column_stack([pre_gl, pre_hr, pre_mets])
+            
+            # Baseline glucose G_0 at meal onset (last minute of pre_gl)
+            baseline_g0 = pre_gl[-1]
             
             # Static feature vector
             static_vec = df_static.loc[idx, static_cols].values.astype(np.float32)
@@ -120,7 +123,8 @@ def load_and_preprocess_sequences(
             valid_records.append({
                 'subject': subject_id,
                 'meal_idx': idx,
-                'timestamp': meal_time
+                'timestamp': meal_time,
+                'baseline_g0': baseline_g0
             })
             
     pre_sequences = np.array(pre_sequences, dtype=np.float32)
@@ -128,12 +132,17 @@ def load_and_preprocess_sequences(
     target_trajectories = np.array(target_trajectories, dtype=np.float32)
     metadata_df = pd.DataFrame(valid_records)
     
+    baseline_g0s = metadata_df['baseline_g0'].values.astype(np.float32)
+    target_deltas = target_trajectories - baseline_g0s[:, None]
+    
     print(f"Extracted dataset: {len(valid_records)} sequences across {metadata_df['subject'].nunique()} subjects.")
     print(f"Pre-sequence shape: {pre_sequences.shape}")
     print(f"Static features shape: {static_features.shape}")
     print(f"Target trajectory shape: {target_trajectories.shape}")
+    print(f"Target deltas shape: {target_deltas.shape}")
     
-    return pre_sequences, static_features, target_trajectories, metadata_df, static_cols
+    return pre_sequences, static_features, target_trajectories, target_deltas, baseline_g0s, metadata_df, static_cols
 
 if __name__ == "__main__":
-    X_seq, X_stat, Y_traj, meta, cols = load_and_preprocess_sequences()
+    X_seq, X_stat, Y_traj, Y_delta, G0, meta, cols = load_and_preprocess_sequences()
+
