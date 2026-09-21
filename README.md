@@ -90,7 +90,7 @@ All models were evaluated using **5-Fold Group K-Fold Cross-Validation grouped b
 
 ```
 Digital-Twin-for-Diabetes/
-├── figures/                                    # High-resolution architectural flowcharts and result plots
+├── figures/                                    # Architectural flowcharts and result plots
 │   ├── project_methodology_flowchart.jpg       # End-to-end methodology architecture diagram
 │   ├── trajectory_comparison_all_models.png    # Continuous trajectory predictions across models
 │   └── causal_simulator_trajectories.png       # 4-scenario counterfactual simulator trajectories
@@ -104,8 +104,6 @@ Digital-Twin-for-Diabetes/
 │   ├── dataset_dl.py                           # PyTorch Dataset extraction & sequence tensors
 │   ├── models_dl.py                            # TransformerForecaster, GRN, & Composite Excursion Loss
 │   └── simulator.py                            # Counterfactual scenario generator & Utility Score engine
-├── Digital_Twin_Progress_Report.tex           # IEEE-style progress report source
-├── Second_Review_Presentation.tex             # Beamer presentation deck source
 ├── requirements.txt                            # Environment dependencies
 └── README.md                                   # Project documentation
 ```

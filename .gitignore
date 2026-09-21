@@ -14,7 +14,7 @@ data/processed/*.csv
 data/processed/*.npz
 !data/processed/.gitkeep
 
-# TeX / LaTeX generated files
+# TeX / LaTeX & Presentation files
 *.aux
 *.log
 *.out
@@ -22,10 +22,18 @@ data/processed/*.npz
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+*.tex
+*.pdf
+
+# Reports, Literature Summaries, and Internal Notes
+literature_review_*
+literature_survey_*
+Project_Modules_and_Phases.md
 
 # IDE and OS settings
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+
 
