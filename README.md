@@ -10,6 +10,21 @@ The system integrates continuous 1-minute Continuous Glucose Monitoring (CGM) te
 
 ---
 
+## 📊 GitHub Analytics
+
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=AoD-X-abhi&show_icons=true&theme=tokyonight&hide_border=true&title_color=4B9CD3&include_all_commits=true" height="192" alt="GitHub Stats" />
+  <img src="https://streak-stats.demolab.com/?user=AoD-X-abhi&theme=tokyonight&hide_border=true&stroke=4B9CD3" height="192" alt="GitHub Streak" />
+</div>
+
+<br>
+
+<div align="center">
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=AoD-X-abhi&theme=react-dark&hide_border=true&area=true&custom_title=AoD-X-abhi%27s%20Contribution%20Graph&color=4B9CD3" width="100%" alt="Activity Graph">
+</div>
+
+---
+
 ## 🏗️ System Architecture & Methodology Flowchart
 
 The end-to-end platform encompasses multi-modal data ingestion, preprocessing & alignment, deep learning trajectory forecasting via **TransformerForecaster**, clinical safety evaluation, and real-time causal "What-If" counterfactual scenario simulations:
