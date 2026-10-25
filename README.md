@@ -14,7 +14,7 @@ The system integrates continuous 1-minute Continuous Glucose Monitoring (CGM) te
 
 The end-to-end platform encompasses multi-modal data ingestion, preprocessing & alignment, deep learning trajectory forecasting via **TransformerForecaster**, clinical safety evaluation, and real-time causal "What-If" counterfactual scenario simulations:
 
-![System Architecture & Methodology Flowchart](figures/project_methodology_flowchart.jpg)
+![System Architecture & Methodology Flowchart](figures/t2d_digital_twin_architecture.png)
 
 ---
 
@@ -91,7 +91,7 @@ All models were evaluated using **5-Fold Group K-Fold Cross-Validation grouped b
 │   ├── server.py                               # Lightweight HTTP server for mobile & desktop
 │   └── data/cohort_profiles.json               # Exported patient profiles & VAE latents
 ├── figures/                                    # Architectural flowcharts and result plots
-│   ├── project_methodology_flowchart.jpg       # End-to-end methodology architecture diagram
+│   ├── t2d_digital_twin_architecture.png       # End-to-end methodology architecture diagram
 │   ├── trajectory_comparison_all_models.png    # Continuous trajectory predictions across models
 │   ├── causal_simulator_trajectories.png       # 4-scenario counterfactual simulator trajectories
 │   ├── microbiome_vae_diagnostics.png          # VAE loss curves, latent boxplots & clinical clustering

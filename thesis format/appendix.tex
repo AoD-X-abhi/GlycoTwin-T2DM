@@ -1,0 +1,81 @@
+\label{chap:appendix}
+
+\section{Neural Network Hyperparameter Configurations}
+Table \ref{tab:hyperparameters} outlines the complete architectural and optimization hyperparameters for the TransformerForecaster and Microbiome $\beta$-VAE models.
+
+\begin{table}[!htbp]
+\centering
+\caption{Model Architectural and Training Hyperparameters}
+\label{tab:hyperparameters}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llc}
+\toprule
+\textbf{Component} & \textbf{Hyperparameter} & \textbf{Configured Value} \\
+\midrule
+\multirow{7}{*}{\textbf{Microbiome $\beta$-VAE}} 
+ & Input Taxa Dimension ($D$) & 1,979 \\
+ & Latent Manifold Bottleneck ($d$) & 8 \\
+ & Encoder Architecture & FC(256) - LN - LeakyReLU - FC(64) - LN \\
+ & Decoder Architecture & FC(64) - LN - LeakyReLU - FC(1979) \\
+ & Masking Denoising Rate ($p_{\text{mask}}$) & 0.15 \\
+ & Positive Class Weight ($w_{\text{pos}}$) & 6.733 \\
+ & Maximum $\beta$ ($\beta_{\max}$) & 0.03 (Warmup over 60 epochs) \\
+\midrule
+\multirow{10}{*}{\textbf{TransformerForecaster}} 
+ & Pre-Meal Sequence Dimension & $60 \times 3$ (Unified GL, HR, METs) \\
+ & Static Feature Dimension & 61 (Macros, Blood, VAE Latents) \\
+ & Temporal Embedding Dimension ($d_{\text{model}}$) & 64 \\
+ & Number of Attention Layers ($L$) & 2 \\
+ & Number of Attention Heads ($h$) & 4 ($d_k = 16$) \\
+ & FFN Expansion Dimension ($d_{\text{ff}}$) & 128 \\
+ & Gated Residual Network Hidden Dim & 64 (ELU + Sigmoid Gating) \\
+ & Forecast Steps ($H$) & 24 (120 minutes @ 5-min intervals) \\
+ & Peak Loss Weight ($\lambda_1$) & 0.60 \\
+ & Velocity Loss Weight ($\lambda_2$) & 0.30 \\
+\midrule
+\multirow{4}{*}{\textbf{Optimization}} 
+ & Optimizer & AdamW (Weight Decay $= 1 \times 10^{-4}$) \\
+ & Initial Learning Rate ($\eta_0$) & $1 \times 10^{-3}$ (Cosine Annealing to $1 \times 10^{-5}$) \\
+ & Batch Size & 32 \\
+ & Gradient Clipping Threshold & 1.0 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\section{Hardware and Computational Environment}
+All deep learning models were implemented in \textbf{Python 3.11} utilizing the \textbf{PyTorch 2.1} ecosystem alongside NumPy, Pandas, Scikit-Learn, and SciPy. 
+
+Model training and 5-Fold Group K-Fold cross-validation were conducted on a dedicated computational workstation equipped with:
+\begin{itemize}
+    \item \textbf{GPU:} NVIDIA GeForce RTX Accelerated Compute Engine.
+    \item \textbf{System Memory:} 32 GB DDR4 RAM.
+    \item \textbf{Host Operating System:} Microsoft Windows 11 Enterprise (64-bit).
+    \item \textbf{Training Wall Time:} Microbiome $\beta$-VAE training converged in approximately 4 minutes; complete 5-Fold Group K-Fold cross-validation of TransformerForecaster across all 1,633 meal events required approximately 28 minutes.
+    \item \textbf{Mobile Client Inference Latency:} On-device mobile inference (PWA client execution via JavaScript matrix routines) executes in under \textbf{12 milliseconds}, ensuring instant responsiveness during touch slider adjustments.
+\end{itemize}
+
+\section{Clinical Laboratory Blood Panel Reference Ranges}
+Table \ref{tab:clinical_ranges} summarizes the diagnostic reference ranges for the baseline venous blood biomarkers included in the static digital twin feature vector.
+
+\begin{table}[!htbp]
+\centering
+\caption{Clinical Diagnostic Blood Biomarkers and Clinical Target Ranges}
+\label{tab:clinical_ranges}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcc}
+\toprule
+\textbf{Biomarker} & \textbf{Clinical Relevance} & \textbf{Normal Range} & \textbf{T2D Threshold} \\
+\midrule
+Fasting Plasma Glucose (FPG) & Basal hepatic glucose regulation & $70 - 99\text{ mg/dL}$ & $\ge 126\text{ mg/dL}$ \\
+Fasting Insulin & Basal pancreatic secretion & $2.6 - 24.9\ \mu\text{IU/mL}$ & Elevated ($>25$) \\
+HOMA-IR & Systemic insulin resistance index & $< 1.0\ (\text{Optimal})$ & $> 2.5\ (\text{Insulin Resistant})$ \\
+Glycated Hemoglobin (HbA1c) & 3-month mean glycation & $< 5.7\%$ & $\ge 6.5\%$ \\
+Total Cholesterol & Overall circulating sterols & $< 200\text{ mg/dL}$ & $\ge 240\text{ mg/dL}$ \\
+HDL Cholesterol & Reverse cholesterol transport & $> 40\text{ mg/dL}$ & $< 40\text{ mg/dL}$ \\
+LDL Cholesterol & Atherogenic lipoprotein & $< 100\text{ mg/dL}$ & $\ge 160\text{ mg/dL}$ \\
+Triglycerides & Circulating neutral lipids & $< 150\text{ mg/dL}$ & $\ge 200\text{ mg/dL}$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

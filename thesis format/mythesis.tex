@@ -1,0 +1,327 @@
+% AMRITA VISHWA VIDYAPEETHAM B.TECH THESIS TEMPLATE
+% Department of Artificial Intelligence, Coimbatore Campus
+
+\documentclass[a4paper, 12pt]{report}
+\usepackage[margin=0.8in]{geometry}
+
+\usepackage{bold-extra}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage[autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\usepackage{setspace}
+\onehalfspacing
+\graphicspath{{images/}{./}{figures/}}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{cite}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{titletoc}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{url}
+
+% -------------------------------------------------------------
+% Hyperref: Clickable Links for TOC, Figures, Tables & Citations
+% -------------------------------------------------------------
+\usepackage[
+    bookmarks=true,
+    bookmarksnumbered=true,
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue,
+    linktoc=all
+]{hyperref}
+
+\theoremstyle{definition}
+\newtheorem{Definition}{Definition}[section]
+
+% -------------------------------------------------------------
+% Title Page
+% -------------------------------------------------------------
+\begin{document}
+	\pagenumbering{gobble}
+	\thispagestyle{empty}
+	\begin{large}
+		\begin{center}
+			{\Large\bfseries{PERSONALIZED MULTI-MODAL DIGITAL TWIN FOR TYPE 2 DIABETES MANAGEMENT: MULTI-HORIZON CONTINUOUS GLUCOSE FORECASTING AND CAUSAL COUNTERFACTUAL SIMULATION}}\\
+			\vspace{1.3cm}
+			A Thesis \\
+			\vspace{.1cm}
+			Submitted in partial fulfilment for the Degree of\\
+			\vspace{.1cm}
+			BACHELOR OF TECHNOLOGY\\
+			\vspace{.1cm}
+            in \\
+            \vspace{.1cm}
+            COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE) \\
+			\vspace{1cm}
+			by\\ \vspace{0.2cm}
+			\vspace{.1cm}
+			{\Large\bfseries{DIVAGAR S (CB.SC.U4AIE23223)}} \\ 
+            {\Large\bfseries{ABHISHEK PANDEY (CB.SC.U4AIE23205)}} \\
+            {\Large\bfseries{PREM (CB.SC.U4AIE23241)}} \\
+            \vspace{2.2cm}
+			
+			\includegraphics[scale=0.8]{univA.png}\\
+			\vfill
+			DEPARTMENT OF ARTIFICIAL INTELLIGENCE\\
+			\Large{\textbf{AMRITA VISHWA VIDYAPEETHAM}}\\
+			{\large COIMBATORE CAMPUS (INDIA)}\\
+			\vspace*{.3cm}
+			27 October 2026
+		\end{center}
+	\end{large}
+
+	% ------------------------------------------------------------------------------------
+	% Bonafide Certificate
+	% ------------------------------------------------------------------------------------
+	\newpage
+	\begin{center}
+		{\large DEPARTMENT OF ARTIFICIAL INTELLIGENCE}\\
+		\Large{ \textbf{AMRITA VISHWA VIDYAPEETHAM}}\\
+		{\large COIMBATORE CAMPUS}\\
+		\vspace*{1.5cm}
+		\includegraphics[scale=0.8]{univA.png}\\
+		\vspace*{1.2cm}
+		{\Large \textbf{BONAFIDE CERTIFICATE}}
+	\end{center}
+	\vspace*{.6cm}
+	\begingroup
+	\emergencystretch 3em
+	\noindent This is to certify that the thesis entitled \enquote{\textbf{Personalized Multi-Modal Digital Twin for Type 2 Diabetes Management: Multi-Horizon Continuous Glucose Forecasting and Causal Counterfactual Simulation}} submitted by \textbf{Divagar S} (Roll No: CB.SC.U4AIE23223), \textbf{Abhishek Pandey} (Roll No: CB.SC.U4AIE23205), and \textbf{Prem} (Roll No: CB.SC.U4AIE23241) for the award of the \textbf{Degree of Bachelor of Technology} under the \textbf{Faculty of Engineering} is a bonafide record of the work carried out by them under my guidance and supervision at the \enquote{Department of Artificial Intelligence}, Amrita Vishwa Vidyapeetham, Coimbatore Campus.\\
+	\endgroup
+
+    \vfill
+    Submitted for the examination held on 27 October 2026.
+    \vfill
+    \textbf{INTERNAL EXAMINER} \hspace{5cm} \textbf{EXTERNAL EXAMINER}
+    \vfill
+    \begin{center}
+		\textbf{Dr. Keerthika K}\\
+		Thesis Advisor,\\
+		Assistant Professor,\\
+		Department of Artificial Intelligence,\\
+		Amrita Vishwa Vidyapeetham,\\
+		Coimbatore Campus,\\
+		India.
+    \end{center}
+
+	% -------------------------------------------------------------------------------
+	% Declaration Page
+	% -------------------------------------------------------------------------------
+	\newpage
+	\begin{center}
+		{\large DEPARTMENT OF ARTIFICIAL INTELLIGENCE}\\
+		\Large{ \textbf{AMRITA VISHWA VIDYAPEETHAM}}\\
+		{\large COIMBATORE CAMPUS}\\
+		\vspace*{2.0cm}
+		\large {\textbf{DECLARATION}}
+		\vspace*{.3cm}
+	\end{center}
+	
+	\begingroup
+	\emergencystretch 3em
+	\noindent We, \textbf{Divagar S} (Roll No: CB.SC.U4AIE23223), \textbf{Abhishek Pandey} (Roll No: CB.SC.U4AIE23205), and \textbf{Prem} (Roll No: CB.SC.U4AIE23241) hereby declare that this thesis entitled \enquote{\textbf{Personalized Multi-Modal Digital Twin for Type 2 Diabetes Management: Multi-Horizon Continuous Glucose Forecasting and Causal Counterfactual Simulation}} is the record of the original work done by us under the guidance of \textbf{Dr. Keerthika K}, Assistant Professor, Department of Artificial Intelligence, Amrita Vishwa Vidyapeetham, Coimbatore Campus. To the best of our knowledge, this work has not formed the basis for the award of any degree/diploma/associateship/fellowship or a similar award to any candidate in any University.\\\\
+	\endgroup
+	
+	\vspace*{0.8cm}
+	\noindent{\bf Place: Coimbatore \hfill Signature of the Students} \\
+	\noindent {\bf Date: 27 October 2026}
+	\vfill
+	\begin{center}
+		\large{COUNTERSIGNED}\\
+	\end{center}
+	\vspace{0.4in}
+	
+    \begin{center}
+		\textbf{Dr. K.P Soman}\\
+		Professor and Dean, \\ 
+		School of Artificial Intelligence, \\ 
+		Amrita Vishwa Vidyapeetham,\\
+		Coimbatore Campus,\\
+		India.
+    \end{center}
+	
+	% -----------------------------------------------------------------------------
+	% Preliminary Pages (Roman Numbering)
+	% -----------------------------------------------------------------------------
+	\clearpage
+	\pagenumbering{roman}
+	\tableofcontents
+	
+	% -------------------- Acknowledgements --------------------
+	\chapter*{Acknowledgements}
+	\addcontentsline{toc}{chapter}{Acknowledgements}
+	We express our deepest and most sincere gratitude to our project guide, \textbf{Dr. Keerthika K}, Assistant Professor, Department of Artificial Intelligence, Amrita Vishwa Vidyapeetham, for her invaluable guidance, continuous encouragement, insightful discussions, and meticulous critique throughout the design and execution of this major project. Her technical vision and constructive feedback were instrumental in steering this research to completion.
+
+    We extend our profound gratitude to \textbf{Dr. K.P Soman}, Professor and Dean, School of Artificial Intelligence, for his visionary leadership, inspiring enthusiasm, and for providing the world-class computational infrastructure and academic environment that made this research possible.
+
+    We also thank all the faculty members, technical officers, and administrative staff of the Department of Artificial Intelligence for their constant support, guidance, and cooperation during our undergraduate journey.
+
+    Finally, we owe our deepest gratitude to our parents, family members, and friends for their unconditional love, moral support, and endless encouragement throughout our lives and studies.
+	
+	\vspace{1.5cm}
+	\begin{flushright}
+		\textbf{DIVAGAR S}\\
+        \textbf{ABHISHEK PANDEY}\\
+        \textbf{PREM}
+	\end{flushright}
+
+	\listoffigures
+	\addcontentsline{toc}{chapter}{List of Figures}
+	\listoftables
+	\addcontentsline{toc}{chapter}{List of Tables}
+	\newpage
+
+	% -------------------- Abbreviations --------------------
+	\section*{{\huge Abbreviations}\hfill} \addcontentsline{toc}{chapter}{\textbf{Abbreviations}}
+	\vspace{0.8cm}
+	\begin{longtable}{lll}
+	AMPK &--& 5$'$ AMP-activated protein kinase \\
+    ARIMA &--& Autoregressive Integrated Moving Average \\
+    BCE &--& Binary Cross-Entropy \\
+    BMI &--& Body Mass Index \\
+    BPM &--& Beats Per Minute \\
+    CGM &--& Continuous Glucose Monitoring \\
+    CV &--& Cross-Validation \\
+    ELBO &--& Evidence Lower Bound \\
+    FPG &--& Fasting Plasma Glucose \\
+    GLP-1 &--& Glucagon-Like Peptide-1 \\
+    GLUT4 &--& Glucose Transporter Type 4 \\
+    GRN &--& Gated Residual Network \\
+    GRU &--& Gated Recurrent Unit \\
+    HbA1c &--& Glycated Hemoglobin A1c \\
+    HDL &--& High-Density Lipoprotein \\
+    HOMA-IR &--& Homeostatic Model Assessment of Insulin Resistance \\
+    HR &--& Heart Rate \\
+    iAUC &--& Incremental Area Under the Curve \\
+    IDF &--& International Diabetes Federation \\
+    ISO &--& International Organization for Standardization \\
+    KL &--& Kullback-Leibler (Divergence) \\
+    LDL &--& Low-Density Lipoprotein \\
+    LPS &--& Lipopolysaccharide \\
+    LSTM &--& Long Short-Term Memory \\
+    MAE &--& Mean Absolute Error \\
+    METs &--& Metabolic Equivalent of Task \\
+    MHSA &--& Multi-Head Self-Attention \\
+    MLP &--& Multi-Layer Perceptron \\
+    MSE &--& Mean Squared Error \\
+    ODE &--& Ordinary Differential Equation \\
+    PCA &--& Principal Component Analysis \\
+    PE &--& Positional Encoding \\
+    PPGR &--& Postprandial Glycemic Response \\
+    PWA &--& Progressive Web Application \\
+    RMSE &--& Root Mean Squared Error \\
+    ROC-AUC &--& Receiver Operating Characteristic Area Under the Curve \\
+    SCFA &--& Short-Chain Fatty Acid \\
+    SCM &--& Structural Causal Model \\
+    SVR &--& Support Vector Regression \\
+    T2D &--& Type 2 Diabetes Mellitus \\
+    TFT &--& Temporal Fusion Transformer \\
+    TIR &--& Time-in-Range ($70 - 180\text{ mg/dL}$) \\
+    VAE &--& Variational Autoencoder \\
+    $\beta$-VAE &--& Beta-Variational Autoencoder \\
+	\end{longtable}
+	\newpage
+
+	% -------------------- List of Symbols --------------------
+	\section*{{\huge List of Symbols}\hfill} \addcontentsline{toc}{chapter}{\textbf{List of Symbols}}
+	\vspace{0.8cm}
+	\begin{tabular}{lll}
+    $G(t)$ &--& Interstitial blood glucose concentration at time $t$ ($\text{mg/dL}$) \\
+    $G_0$ &--& Baseline glucose measured at meal start timestamp $t_{\text{meal}}$ ($\text{mg/dL}$) \\
+    $\Delta G(t)$ &--& Relative postprandial glucose excursion rise: $G(t) - G_0$ ($\text{mg/dL}$) \\
+    $G_{\max}$ &--& Peak postprandial blood glucose concentration ($\text{mg/dL}$) \\
+    $\Delta G_{\max}$ &--& Peak postprandial glucose rise: $G_{\max} - G_0$ ($\text{mg/dL}$) \\
+    $T_{\max}$ &--& Postprandial time elapsed to reach peak glucose excursion (minutes) \\
+    $\mathbf{X}_{\text{seq}}$ &--& Pre-meal dynamic sequence matrix ($\mathbb{R}^{60 \times 3}$) \\
+    $\mathbf{x}_{\text{stat}}$ &--& Static patient-meal metadata covariate vector ($\mathbb{R}^{61}$) \\
+    $\mathbf{Y}_{\text{traj}}$ &--& Postprandial 120-minute target excursion trajectory ($\mathbb{R}^{24}$) \\
+    $\mathbf{x}_{\text{microbe}}$ &--& Binary presence-absence gut taxonomic indicator vector ($\{0, 1\}^{1979}$) \\
+    $\mathbf{z}_{\text{microbiome}}$ &--& Continuous latent gut microbiome embedding vector ($\mathbb{R}^8$) \\
+    $\boldsymbol{\mu}, \boldsymbol{\sigma}^2$ &--& Latent posterior mean and variance vectors of the $\beta$-VAE \\
+    $\beta(t)$ &--& Dynamic regularization coefficient in $\beta$-VAE annealing schedule \\
+    $w_{\text{pos}}$ &--& Positive class weighting factor in weighted BCE loss ($w_{\text{pos}} = 6.733$) \\
+    $\mathcal{D}_{\text{KL}}$ &--& Kullback-Leibler divergence between posterior and prior \\
+    $\mathbf{h}_{\text{temp}}$ &--& Multi-Head Self-Attention pooled temporal context vector ($\mathbb{R}^{64}$) \\
+    $\mathbf{h}_{\text{stat}}$ &--& Gated Residual Network static representation vector ($\mathbb{R}^{64}$) \\
+    $\mathbf{h}_{\text{fused}}$ &--& Fused multi-modal digital twin state embedding ($\mathbb{R}^{128}$) \\
+    $\lambda_1, \lambda_2$ &--& Hyperparameter penalty weights in Composite Excursion Loss \\
+    $U$ &--& Multi-metric Clinical Utility Score ($U \in [0, 1]$) \\
+    $\text{TIR}$ &--& Percentage Time-in-Range ($70 - 180\text{ mg/dL}$) \\
+	\end{tabular}
+	\newpage
+
+	% -------------------- Abstract --------------------
+	\chapter*{Abstract}
+	\addcontentsline{toc}{chapter}{Abstract}
+	Postprandial Glycemic Response (PPGR) exhibits profound inter-individual variability, rendering generic, population-wide dietary guidelines largely ineffective for metabolic disease management. In this thesis, we propose \textbf{GlycoTwin}, an end-to-end multi-modal Personalized Digital Twin framework for continuous postprandial glucose trajectory forecasting and causal counterfactual intervention simulation in Type 2 Diabetes (T2D).
+
+    Using the multi-week, free-living CGMacros cohort (45 human participants across Healthy, Pre-diabetes, and T2D strata; 1,633 meal events), our system fuses high-frequency 1-minute Continuous Glucose Monitoring (CGM) telemetry (Abbott FreeStyle Libre and Dexcom G6), wearable fitness tracking streams (Fitbit Heart Rate and METs), dietary macronutrient logs, clinical laboratory blood diagnostics, and high-dimensional gut microbiome taxonomic profiles (1,979 binary bacterial species).
+
+    To effectively encode sparse binary taxonomy, we formulate a deep $\beta$-Variational Autoencoder ($\beta$-VAE) with stochastic taxa-masking denoising and dynamic $\beta$-annealing, achieving an empirical 1.0000 ROC-AUC and PR-AUC and discovering an 8-dimensional non-linear continuous latent manifold ($\mathbf{z} \in \mathbb{R}^8$) driven by key metabolic taxa (\emph{Oxalobacter formigenes}, \emph{Furfurilactobacillus rossiae}). For continuous 120-minute postprandial trajectory prediction, we introduce \textbf{TransformerForecaster}, a multi-modal neural architecture combining Multi-Head Self-Attention (MHSA) over pre-meal dynamics, Gated Residual Networks (GRN) for static feature gating, a Residual Delta trajectory formulation ($\Delta G_t = G_t - G_0$) that completely eliminates baseline offset bias, and a physiologically constrained Composite Excursion Loss.
+
+    Evaluated through 5-Fold Group K-Fold cross-validation on strictly unseen human participants, our framework achieves a continuous Trajectory Mean Absolute Error (MAE) of \textbf{19.37 mg/dL}, Root Mean Squared Error (RMSE) of \textbf{28.14 mg/dL}, Peak Excursion MAE ($G_{\max}$) of \textbf{24.73 mg/dL}, and explains \textbf{68.8\% of postprandial glucose variance} ($R^2 = 0.688$). This performance outperforms recurrent neural baselines by \textbf{30.4\%} and delivers a \textbf{54.7\% error reduction} over published literature benchmarks on the CGMacros cohort. Point-by-point Clarke Error Grid clinical safety analysis reveals \textbf{98.47\% Zone A+B compliance}, with zero predictions falling into dangerous error Zones D or E, fully meeting ISO 15197 regulatory standards.
+
+    Finally, we formulate an interactive causal simulation engine evaluating four pre-meal intervention scenarios and ranking them via a Clinical Utility Score ($U \in [0, 1]$), paired with a lightweight, mobile-first Progressive Web App (PWA) to empower patients to test dietary modifications and exercise timing prior to meal consumption.
+
+	% -----------------------------------------------------------------------------
+	% Main Matter (Arabic Numbering)
+	% -----------------------------------------------------------------------------
+	\clearpage
+	\pagenumbering{arabic}
+	\setcounter{page}{1}
+
+	\chapter{Introduction}
+	\input{chapters/introduction}
+
+	\chapter{Literature Review}
+	\input{chapters/chapter2}
+
+	\chapter{Multi-Modal Dataset and Preprocessing Pipeline}
+	\input{chapters/chapter3}
+
+	\chapter{Microbiome $\beta$-Variational Autoencoder}
+	\input{chapters/chapter4} 
+
+	\chapter{TransformerForecaster Deep Learning Model}
+	\input{chapters/chapter5}
+
+	\chapter{Experimental Results and Discussion}
+	\input{chapters/chapter6}
+
+	\chapter{Causal Counterfactual Simulation and Mobile Application}
+	\input{chapters/chapter7}
+
+	\chapter{Conclusion and Scope for Further Research}
+	\input{chapters/conclusion}
+
+	% -------------------- Appendix --------------------
+	\appendix
+	\chapter{System Architecture and Implementation Details}
+	\input{chapters/appendix}
+
+	% -------------------- References --------------------
+	\newpage
+	\renewcommand{\bibname}{References}
+	\bibliographystyle{ieeetr}
+	\addcontentsline{toc}{chapter}{References}
+	\bibliography{mybib}
+
+	% -------------------- List of Publications --------------------
+	\chapter*{List of Publications \\ \large(Based on the Research Work)}
+	\addcontentsline{toc}{chapter}{List of Publications Based on the Research Work}
+	
+	\textbf{\Large Papers Communicated / Under Preparation}
+	\begin{enumerate}
+		\item \textbf{Divagar S}, \textbf{Abhishek Pandey}, and \textbf{Prem}, \enquote{Personalized Multi-Modal Digital Twin for Type 2 Diabetes Management: Multi-Horizon Continuous Glucose Forecasting and Causal Counterfactual Simulation}, \emph{Under preparation for submission to IEEE Conference / Transactions}, 2026.
+	\end{enumerate}
+
+\end{document}

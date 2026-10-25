@@ -1,0 +1,107 @@
+\label{chap:literature_review}
+
+\section{Overview of Related Work}
+Personalized metabolic management and continuous blood glucose forecasting reside at the intersection of mathematical physiology, biomedical engineering, deep time-series learning, metagenomics, and digital twin technology. This chapter conducts a comprehensive critical review of prior methodologies, highlighting their foundational contributions, mathematical mechanisms, and practical clinical limitations.
+
+\section{Physiological Compartmental Models}
+Historically, mathematical modeling of the glucose-insulin regulatory system has been dominated by compartmental differential equation models. The earliest foundational formulation was the \textbf{Bergman Minimal Model} (1979), which employs a two-compartment system of non-linear ordinary differential equations (ODEs) to capture insulin sensitivity ($S_I$) and glucose effectiveness ($S_G$):
+\begin{align}
+    \frac{dG(t)}{dt} &= -(p_1 + X(t))G(t) + p_1 G_b \\
+    \frac{dX(t)}{dt} &= -p_2 X(t) + p_3 (I(t) - I_b)
+\end{align}
+where $G(t)$ denotes plasma glucose, $I(t)$ denotes plasma insulin, $X(t)$ represents insulin action in the interstitial space, and $p_1, p_2, p_3$ are patient-specific kinetic constants.
+
+To capture the complex multi-organ dynamics of meal digestion and insulin kinetics, the \textbf{UVA/Padova Type 1 Diabetes Simulator} was developed by Cobelli, Dalla Man, and colleagues \cite{cobelli2011uva}. The UVA/Padova simulator expands the minimal model into a 13-compartment non-linear ODE system tracking gastric emptying, two-compartment gut glucose absorption, hepatic glucose production (HGP), renal clearance, and peripheral glucose utilization. While the UVA/Padova system achieved regulatory approval from the United States Food and Drug Administration (FDA) as an in silico substitute for preclinical animal trials in artificial pancreas algorithms, its clinical deployment for free-living Type 2 Diabetes management faces insurmountable barriers:
+\begin{itemize}
+    \item \textbf{Intractable Parameter Identification:} Identifying patient-specific constants requires invasive, multi-hour triple-tracer intravenous glucose tolerance tests (IVGTT) or hyperinsulinemic-euglycemic clamps, which are clinically infeasible for consumer digital twins.
+    \item \textbf{Omission of Heterogeneous Modalities:} Compartmental ODEs do not possess mechanisms to incorporate real-time fitness wearable streams (variable METs and heart rates), dietary macronutrient splits (fiber, fats, protein interactions), or metagenomic gut profiles.
+\end{itemize}
+
+\section{Machine Learning Approaches for Glycemic Forecasting}
+With the advent of Continuous Glucose Monitoring (CGM) sensors, researchers shifted toward data-driven statistical and machine learning algorithms.
+
+\subsection{Autoregressive and Kernel Methods}
+Early data-driven methods utilized Autoregressive Integrated Moving Average (ARIMA) models, Auto-Regressive with Exogenous Inputs (ARX), and Support Vector Regression (SVR) \cite{georga2013evaluating}. Georga et al. \cite{georga2013evaluating} formulated an SVR framework with radial basis function (RBF) kernels to forecast subcutaneous glucose concentrations over short prediction horizons ($PH \in [15, 30]\text{ minutes}$). While capable of extrapolating resting, steady-state glucose trends during nocturnal fasting, SVR and ARIMA algorithms fail precipitously during postprandial periods. Because they lack explicit dietary macronutrient vectors, they cannot predict the sudden, non-linear inflection of glucose following a meal, leading to phase lag errors where predicted peaks lag 20–40 minutes behind physiological spikes.
+
+\subsection{Tabular Gradient-Boosted Decision Trees}
+To incorporate dietary logs and static clinical metadata, machine learning frameworks shifted to gradient-boosted decision trees (XGBoost, LightGBM, and CatBoost). In a landmark study, Zeevi et al. \cite{zeevi2015personalized} monitored 800 non-diabetic and pre-diabetic individuals across 46,898 meals, utilizing gradient-boosted trees to predict postprandial incremental Area Under the Curve (iAUC). Similarly, Mendes et al. \cite{mendes2024cgmacros} recently introduced the CGMacros benchmark, evaluating tabular regressors on multi-modal wearable and CGM telemetry.
+
+However, tabular machine learning exhibits a critical structural flaw: \textbf{it collapses temporal dynamics into scalar summary statistics}. Models predict only a single scalar value—such as post-meal peak glucose ($G_{\max}$) or 2-hour iAUC. They are entirely incapable of generating the continuous, minute-by-minute 120-minute postprandial curve ($\mathbf{Y} \in \mathbb{R}^{24}$) required for continuous monitoring and closed-loop biofeedback.
+
+\section{Deep Sequential Architectures and Recurrent Networks}
+To model temporal sequences directly, deep neural networks have been widely applied to diabetes telemetry \cite{zhu2021deep}. Recurrent Neural Networks (RNNs), specifically Long Short-Term Memory (LSTM) \cite{mirshekarian2019using} and Gated Recurrent Units (GRU) \cite{martinsson2020blood}, utilize internal gating mechanisms to maintain hidden states over sequential inputs:
+\begin{align}
+    \mathbf{f}_t &= \sigma(\mathbf{W}_f [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_f) \\
+    \mathbf{i}_t &= \sigma(\mathbf{W}_i [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_i) \\
+    \mathbf{c}_t &= \mathbf{f}_t \odot \mathbf{c}_{t-1} + \mathbf{i}_t \odot \tanh(\mathbf{W}_c [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_c) \\
+    \mathbf{h}_t &= \sigma(\mathbf{W}_o [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_o) \odot \tanh(\mathbf{c}_t)
+\end{align}
+
+Despite their theoretical suitability for time-series, recurrent models encounter severe practical failure modes when deployed for multi-horizon postprandial forecasting:
+\begin{enumerate}
+    \item \textbf{Spike Dampening and Regression-to-the-Mean:} Over multi-step forecasting horizons ($H = 24$ steps, 120 minutes), recurrent architectures suffer from vanishing gradients and error accumulation. When trained with Mean Squared Error (MSE), recurrent models default to predicting a flat trajectory near the population mean ($\approx 120\text{ mg/dL}$), severely underestimating the acute amplitude of physiological hyperglycemic spikes.
+    \item \textbf{Static Context Compression Bottleneck:} In standard LSTMs, static clinical covariates (blood biomarkers, age, BMI, gut microbiome) must be repeated across all time-steps or concatenated to the initial cell state $\mathbf{c}_0$. This causes the high-dimensional static signal to be overwritten by subsequent dynamic inputs as sequence length increases.
+\end{enumerate}
+
+\section{Attention Mechanisms and Transformers in Healthcare Time-Series}
+The introduction of the Transformer architecture by Vaswani et al. \cite{vaswani2017attention} fundamentally revolutionized sequential modeling by replacing recurrence with \textbf{Multi-Head Self-Attention (MHSA)}. Rather than compressing past information into a fixed-size vector, self-attention allows the network to compute direct, dynamic attention weights between any two time steps regardless of their temporal distance:
+\begin{equation}
+    \text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\left(\frac{\mathbf{Q} \mathbf{K}^T}{\sqrt{d_k}}\right) \mathbf{V}
+\end{equation}
+
+Building upon self-attention, Lim et al. \cite{lim2021temporal} proposed the \textbf{Temporal Fusion Transformer (TFT)} for multi-horizon time-series forecasting. TFT introduced \textbf{Gated Residual Networks (GRN)} to selectively suppress irrelevant static features and provide non-linear processing with adaptive gating. In this thesis, we adapt and expand these principles, designing a specialized hybrid architecture that unites MHSA temporal encoders with GRN static modules to capture both pre-meal glucose momentum and high-dimensional clinical biomarkers.
+
+\section{Gut Metagenomics in Metabolic Regulation and Representation Learning}
+The human gastrointestinal tract harbors trillions of microorganisms whose collective genome (the gut metagenome) encodes metabolic pathways that directly influence host glucose homeostasis \cite{turnbaugh2006obesity}. Microbial fermentation of non-digestible polysaccharides yields Short-Chain Fatty Acids (SCFAs)—predominantly acetate, propionate, and butyrate \cite{canfora2015short}. Butyrate binds to G-protein-coupled receptors (GPR41/FFAR3 and GPR43/FFAR2) on intestinal enteroendocrine L-cells, stimulating the secretion of glucagon-like peptide-1 (GLP-1) and peptide YY (PYY), which enhance glucose-dependent insulin secretion and delay gastric emptying \cite{canfora2015short}. Conversely, pro-inflammatory lipopolysaccharide (LPS) shed by Gram-negative enterobacteria triggers metabolic endotoxemia and systemic insulin resistance \cite{asnicar2021microbiome}.
+
+\subsection{Limitations of Traditional Dimensionality Reduction (PCA)}
+Metagenomic taxonomic profiles typically report the presence or absence of thousands of bacterial species ($D \ge 1,000$) across modest clinical cohorts ($N < 100$). Because the feature dimension vastly exceeds the sample size ($D \gg N$), dimensionality reduction is strictly mandatory to prevent catastrophic overfitting. 
+
+Prior studies (e.g., Zeevi et al. \cite{zeevi2015personalized}) utilized linear Principal Component Analysis (PCA) or classical multidimensional scaling (PCoA) based on Bray-Curtis distance. However, linear PCA suffers from three fundamental mathematical limitations:
+\begin{enumerate}
+    \item \textbf{Violation of Distributional Assumptions:} PCA assumes continuous Gaussian-distributed variables and orthogonal Euclidean projections. In contrast, taxonomic profiles are sparse Bernoulli binary presence-absence indicators ($x_j \in \{0, 1\}$).
+    \item \textbf{Inability to Capture Non-Linear Microbial Consortia:} Bacteria function within non-linear ecological guilds (e.g., cross-feeding networks where Species A produces lactate which is metabolized by Species B into butyrate). Linear projections fail to model non-linear co-occurrence structures.
+\end{enumerate}
+
+\subsection{Variational Autoencoders ($\beta$-VAEs)}
+To learn smooth, continuous, non-linear representations of high-dimensional data, Kingma and Welling \cite{kingma2013auto} introduced the \textbf{Variational Autoencoder (VAE)}. Rather than mapping inputs to deterministic point vectors, a VAE maps an input $\mathbf{x}$ to the parameters of a latent probability distribution $q_\phi(\mathbf{z}|\mathbf{x}) = \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$, optimizing the Evidence Lower Bound (ELBO):
+\begin{equation}
+    \mathcal{L}_{\text{ELBO}}(\theta, \phi; \mathbf{x}) = \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\big[\log p_\theta(\mathbf{x}|\mathbf{z})\big] - \mathcal{D}_{\text{KL}}\big(q_\phi(\mathbf{z}|\mathbf{x}) \,\|\, p(\mathbf{z})\big)
+\end{equation}
+
+Higgins et al. \cite{higgins2017beta} introduced the \textbf{$\beta$-VAE}, which introduces an adjustable hyperparameter $\beta > 0$ scaling the Kullback-Leibler (KL) divergence penalty. By modulating $\beta$, the network balances reconstruction fidelity against latent channel capacity, encouraging the discovery of disentangled, statistically independent latent factors. In this thesis, we customize the $\beta$-VAE architecture with stochastic taxa-masking denoising and $\beta$-annealing to successfully encode 1,979 binary gut species into an 8-dimensional latent manifold without overfitting.
+
+\section{Digital Twins and Causal Simulation in Metabolic Care}
+A \textbf{Digital Twin} is defined as an in silico virtual representation of a physical biological entity that is continuously updated with real-time sensor telemetry and capable of simulating prospective interventions \cite{voigt2021digital}. In metabolic healthcare, Shamanna et al. \cite{shamanna2020twin} conducted a landmark randomized controlled trial evaluating the efficacy of a Whole-Body Digital Twin platform. The trial demonstrated that personalized digital twin guidance led to significant HbA1c reductions ($>1.5\%$) and diabetes reversal in over 70\% of participants.
+
+However, existing commercial digital twin platforms function primarily as heuristic rule-based recommender engines. To achieve genuine clinical utility, digital twins must incorporate \textbf{structural causal modeling} \cite{pearl2009causality}. By performing in silico counterfactual inference—answering the question *"What would happen to patient $i$'s glucose trajectory if they reduced carbohydrates by 50\% or engaged in a 30-minute walk post-meal?"*—the digital twin empowers patients to test proactive lifestyle modifications before taking a bite.
+
+\section{Summary of Gaps and Proposed GlycoTwin Solutions}
+Table \ref{tab:literature_comparison} synthesizes the key limitations of existing paradigms and highlights the solutions introduced by the GlycoTwin framework in this thesis.
+
+\begin{table}[!htbp]
+\centering
+\caption{Comprehensive Comparison: Existing Paradigms vs. GlycoTwin Framework}
+\label{tab:literature_comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lp{3.5cm}p{3.8cm}p{5.5cm}}
+\toprule
+\textbf{Capability / Dimension} & \textbf{Physiological Models (UVA/Padova)} & \textbf{Tabular ML (Zeevi / CGMacros)} & \textbf{GlycoTwin Framework (Ours)} \\
+\midrule
+\textbf{Multi-Modal Telemetry} & None (Synthetic blood glucose only) & Tabular features only (no continuous sequence modeling) & Synchronized dual CGM (1-min), Fitbit HR/METs, Diet, Blood, Gut Microbiome. \\
+\midrule
+\textbf{Prediction Horizon} & Short-term continuous ($<30$ min ahead) & Scalar only ($G_{\max}$ or iAUC summary statistic) & Continuous 120-minute multi-horizon postprandial trajectory ($\mathbf{Y} \in \mathbb{R}^{24}$). \\
+\midrule
+\textbf{Microbiome Encoding} & None & Linear PCA / Bray-Curtis distance & Deep $\beta$-VAE with stochastic taxa-masking denoising (1.0000 ROC-AUC). \\
+\midrule
+\textbf{Neural Architecture} & Mechanistic ODEs (requires invasive IVGTT) & Gradient Boosted Trees (XGBoost, LightGBM) & TransformerForecaster (MHSA + Gated Residual Networks + Residual Delta). \\
+\midrule
+\textbf{Spike Fidelity} & Highly variable & Mean-biased scalar & Composite Excursion Loss ($\mathcal{L}_{\text{MSE}} + \text{Peak} + \text{Velocity}$). \\
+\midrule
+\textbf{Clinical Safety} & Not certified on free-living cohorts & Unassessed on continuous trajectories & ISO 15197 / Clarke Error Grid Certified (\textbf{98.47\% Zone A+B}). \\
+\midrule
+\textbf{Intervention Engine} & Closed-loop insulin pump dosing only & Retrospective statistical correlation & Real-Time Causal "What-If" Simulator \& Mobile PWA. \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

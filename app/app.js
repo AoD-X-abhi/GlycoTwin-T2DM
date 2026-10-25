@@ -549,14 +549,14 @@ class GlycoTwinApp {
     const y180 = mapY(180);
     const y70 = mapY(70);
     const targetGrad = ctx.createLinearGradient(0, y180, 0, y70);
-    targetGrad.addColorStop(0, 'rgba(16, 185, 129, 0.12)');
-    targetGrad.addColorStop(1, 'rgba(16, 185, 129, 0.04)');
+    targetGrad.addColorStop(0, 'rgba(5, 150, 105, 0.12)');
+    targetGrad.addColorStop(1, 'rgba(5, 150, 105, 0.03)');
     ctx.fillStyle = targetGrad;
     ctx.fillRect(padLeft, y180, plotW, y70 - y180);
 
     // Target boundary dotted lines
     ctx.setLineDash([3, 3]);
-    ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+    ctx.strokeStyle = 'rgba(5, 150, 105, 0.45)';
     ctx.lineWidth = 1;
     [180, 70].forEach(val => {
       ctx.beginPath();
@@ -576,10 +576,10 @@ class GlycoTwinApp {
 
     // 2. Plot Curves
     const curvesToPlot = [
-      { data: this.simCurves.s1, color: '#ef4444', lw: 2.2 },
-      { data: this.simCurves.s2, color: '#f97316', lw: 2.2 },
-      { data: this.simCurves.s3, color: '#10b981', lw: 2.6 },
-      { data: this.simCurves.s4, color: '#3b82f6', lw: 3.2 }
+      { data: this.simCurves.s1, color: '#dc2626', lw: 2.2 },
+      { data: this.simCurves.s2, color: '#ea580c', lw: 2.2 },
+      { data: this.simCurves.s3, color: '#059669', lw: 2.6 },
+      { data: this.simCurves.s4, color: '#2563eb', lw: 3.2 }
     ];
 
     curvesToPlot.forEach(cp => {
@@ -602,7 +602,7 @@ class GlycoTwinApp {
     if (this.scrubberMinute !== null) {
       const scrubX = mapX(this.scrubberMinute);
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.strokeStyle = 'rgba(15, 23, 42, 0.4)';
       ctx.lineWidth = 1.2;
       ctx.setLineDash([2, 2]);
       ctx.moveTo(scrubX, padTop);
@@ -654,8 +654,8 @@ class GlycoTwinApp {
     const normValues = latents.map(v => Math.max(0.15, Math.min(1.0, 0.5 + (v / 2.0))));
 
     // Draw concentric radar web
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1.2;
     for (let rPct = 0.25; rPct <= 1.0; rPct += 0.25) {
       ctx.beginPath();
       for (let i = 0; i < numAxes; i++) {
@@ -670,7 +670,7 @@ class GlycoTwinApp {
     }
 
     // Draw axis lines and labels
-    ctx.fillStyle = '#94a3b8';
+    ctx.fillStyle = '#64748b';
     ctx.font = '10px Outfit, sans-serif';
     ctx.textAlign = 'center';
 
@@ -680,6 +680,7 @@ class GlycoTwinApp {
       const y = cy + radius * Math.sin(angle);
 
       ctx.beginPath();
+      ctx.strokeStyle = '#e2e8f0';
       ctx.moveTo(cx, cy);
       ctx.lineTo(x, y);
       ctx.stroke();
@@ -700,9 +701,9 @@ class GlycoTwinApp {
     });
     ctx.closePath();
 
-    ctx.fillStyle = 'rgba(139, 92, 246, 0.25)';
+    ctx.fillStyle = 'rgba(124, 58, 237, 0.16)';
     ctx.fill();
-    ctx.strokeStyle = '#a855f7';
+    ctx.strokeStyle = '#7c3aed';
     ctx.lineWidth = 2.4;
     ctx.stroke();
 
@@ -713,7 +714,7 @@ class GlycoTwinApp {
       const y = cy + radius * val * Math.sin(angle);
       ctx.beginPath();
       ctx.arc(x, y, 4, 0, 2 * Math.PI);
-      ctx.fillStyle = '#c084fc';
+      ctx.fillStyle = '#7c3aed';
       ctx.fill();
     });
   }
@@ -764,8 +765,8 @@ class GlycoTwinApp {
     ctx.closePath();
 
     const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, 'rgba(6, 182, 212, 0.25)');
-    grad.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+    grad.addColorStop(0, 'rgba(2, 132, 199, 0.18)');
+    grad.addColorStop(1, 'rgba(2, 132, 199, 0.0)');
     ctx.fillStyle = grad;
     ctx.fill();
 
@@ -777,7 +778,7 @@ class GlycoTwinApp {
       if (i === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     });
-    ctx.strokeStyle = '#06b6d4';
+    ctx.strokeStyle = '#0284c7';
     ctx.lineWidth = 2.2;
     ctx.stroke();
 
@@ -788,7 +789,7 @@ class GlycoTwinApp {
     ctx.arc(lastX - 2, lastY, 4, 0, 2 * Math.PI);
     ctx.fillStyle = '#fff';
     ctx.fill();
-    ctx.strokeStyle = '#06b6d4';
+    ctx.strokeStyle = '#0284c7';
     ctx.lineWidth = 2;
     ctx.stroke();
   }

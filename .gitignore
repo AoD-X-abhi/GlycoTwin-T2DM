@@ -14,7 +14,7 @@ data/processed/*.csv
 data/processed/*.npz
 !data/processed/.gitkeep
 
-# TeX / LaTeX & Presentation files
+# TeX / LaTeX build artifacts
 *.aux
 *.log
 *.out
@@ -22,8 +22,17 @@ data/processed/*.npz
 *.fls
 *.fdb_latexmk
 *.synctex.gz
-*.tex
+*.bbl
+*.blg
+*.lot
+*.lof
 *.pdf
+
+# Allow thesis LaTeX source files
+!thesis format/**/*.tex
+!thesis format/*.tex
+!thesis format/**/*.bib
+!thesis format/*.bib
 
 # Reports, Literature Summaries, and Internal Notes
 literature_review_*
