@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#070a11">
+  <meta name="description" content="Personalized Digital Twin for Type 2 Diabetes Management - Multi-Modal Glycemic Forecasting & Causal Counterfactual Scenario Simulator">
+  <title>GlycoTwin | Mobile Digital Twin for T2D</title>
+  
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Mobile Viewport Container -->
+  <div class="phone-viewport-container">
+    
+    <!-- Phone Status Bar -->
+    <header class="phone-status-bar">
+      <span id="live-clock">09:41</span>
+      <div class="status-icons">
+        <span>5G</span>
+        <svg width="16" height="12" viewBox="0 0 24 16" fill="currentColor">
+          <rect x="1" y="1" width="19" height="14" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
+          <rect x="3" y="3" width="13" height="10" rx="1.5" fill="currentColor"/>
+          <path d="M22 6V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </header>
+
+    <!-- App Brand & Patient Header -->
+    <nav class="app-header">
+      <div class="brand-section">
+        <div class="brand-icon">
+          <!-- Pulse Sine Wave SVG -->
+          <svg viewBox="0 0 24 24">
+            <path d="M3 13h3.5l2-6 3.5 12 2.5-9 1.5 5 2-2H21" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">Glyco<span>Twin</span></h1>
+        </div>
+      </div>
+
+      <!-- Cohort Switcher -->
+      <div class="patient-select-wrapper">
+        <select id="patientSelect" class="patient-select" aria-label="Select Patient Profile">
+          <option value="11">Subject 011 (Pre-DM)</option>
+          <option value="45">Subject 045 (Type 2 DM)</option>
+          <option value="2">Subject 002 (Healthy)</option>
+          <option value="22">Subject 022 (High IR)</option>
+        </select>
+      </div>
+    </nav>
+
+    <!-- Main Screens Viewport -->
+    <main class="screens-viewport">
+
+      <!-- ==============================================================
+           SCREEN 1: METABOLIC DASHBOARD
+           ============================================================== -->
+      <section id="screen-dashboard" class="app-screen active">
+        
+        <!-- Hero CGM Glucose Card -->
+        <div class="glass-card hero-glucose-card">
+          <div class="glucose-header">
+            <div>
+              <div class="sensor-indicator">
+                <span class="pulse-dot"></span>
+                <span>Libre + Dexcom G6 Dual Sync</span>
+              </div>
+              <div class="glucose-main-value">
+                <span class="glucose-number" id="dashGlucoseVal">118</span>
+                <span class="glucose-unit">mg/dL</span>
+              </div>
+            </div>
+            <div class="glucose-trend-pill" id="dashTrendPill">
+              <span>➔</span> <span>Steady</span>
+            </div>
+          </div>
+
+          <!-- Real-Time CGM Mini Trace Sparkline -->
+          <div class="glucose-sparkline-box">
+            <canvas id="cgmSparklineCanvas"></canvas>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); margin-top: 4px;">
+            <span>-2 Hours</span>
+            <span>Target: 70–180 mg/dL</span>
+            <span>Now</span>
+          </div>
+        </div>
+
+        <!-- Biometric Rings Row -->
+        <div class="biometric-grid">
+          <div class="biometric-card">
+            <div class="biometric-icon">❤️</div>
+            <div class="biometric-val" id="dashHeartRate">72 <small style="font-size: 10px;">BPM</small></div>
+            <div class="biometric-label">Fitbit HR</div>
+          </div>
+          <div class="biometric-card">
+            <div class="biometric-icon">⚡</div>
+            <div class="biometric-val" id="dashMets">1.2 <small style="font-size: 10px;">METs</small></div>
+            <div class="biometric-label">Exertion</div>
+          </div>
+          <div class="biometric-card">
+            <div class="biometric-icon">🎯</div>
+            <div class="biometric-val" id="dashTIR">92%</div>
+            <div class="biometric-label">Daily TIR</div>
+          </div>
+        </div>
+
+        <!-- Clinical Lab Blood Panel Card -->
+        <div class="glass-card">
+          <div class="section-header">
+            <h2 class="section-title">
+              <span>🧪</span> Clinical Lab Diagnostic Panel
+            </h2>
+            <span class="section-badge" id="dashCohortBadge">Pre-diabetes</span>
+          </div>
+          <div class="clinical-grid">
+            <div class="clinical-item">
+              <span class="k">HbA1c Level</span>
+              <span class="v" id="dashHbA1c">6.1%</span>
+            </div>
+            <div class="clinical-item">
+              <span class="k">Fasting Glucose</span>
+              <span class="v" id="dashFastingGlu">104 mg/dL</span>
+            </div>
+            <div class="clinical-item">
+              <span class="k">Fasting Insulin</span>
+              <span class="v" id="dashInsulin">12.0 µIU/mL</span>
+            </div>
+            <div class="clinical-item">
+              <span class="k">Body Mass Index</span>
+              <span class="v" id="dashBMI">26.5 kg/m²</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gut Microbiome Summary Snapshot -->
+        <div class="glass-card">
+          <div class="section-header">
+            <h2 class="section-title">
+              <span>🧬</span> Gut Microbiome VAE Status
+            </h2>
+            <span class="section-badge" style="background: rgba(139, 92, 246, 0.15); color: var(--purple); border-color: rgba(139, 92, 246, 0.3);">
+              8-VAE Latents
+            </span>
+          </div>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+            Deep non-linear autoencoder latent coordinates mapped from 1,979 bacterial species:
+          </p>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+            <span style="color: var(--text-dim);">Species Richness:</span>
+            <strong id="dashRichness">412 species</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+            <span style="color: var(--text-dim);">Butyrate Synthesis:</span>
+            <strong style="color: var(--success);" id="dashButyrate">Optimal (Score 4/5)</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px;">
+            <span style="color: var(--text-dim);">Metabolic Health Index:</span>
+            <strong style="color: var(--primary);" id="dashGutHealth">82 / 100</strong>
+          </div>
+        </div>
+
+        <!-- Action: Plan Upcoming Meal -->
+        <button id="btnGoToMeal" class="btn-primary" style="margin-top: 6px;">
+          <span>🍽️</span> Log Meal & Test Counterfactual Interventions
+        </button>
+
+      </section>
+
+      <!-- ==============================================================
+           SCREEN 2: MEAL LOGGER & MACROS
+           ============================================================== -->
+      <section id="screen-meals" class="app-screen">
+        
+        <div class="section-header">
+          <h2 class="section-title">
+            <span>🥗</span> Pre-Meal Nutritional Logger
+          </h2>
+          <span class="section-badge">Pre-Ingestion</span>
+        </div>
+
+        <!-- Preset Meal Chips -->
+        <div class="preset-chips-row" id="presetChipsContainer">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Macro Adjustment Sliders -->
+        <div class="glass-card">
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>🌾 Carbohydrates</span>
+              <span class="slider-badge carbs" id="valCarbs">55 g</span>
+            </div>
+            <input type="range" id="inputCarbs" min="0" max="130" step="1" value="55">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>🥦 Dietary Fiber</span>
+              <span class="slider-badge fiber" id="valFiber">7 g</span>
+            </div>
+            <input type="range" id="inputFiber" min="0" max="30" step="1" value="7">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>🍗 Dietary Protein</span>
+              <span class="slider-badge protein" id="valProtein">24 g</span>
+            </div>
+            <input type="range" id="inputProtein" min="0" max="80" step="1" value="24">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>🥑 Healthy Fats</span>
+              <span class="slider-badge fat" id="valFat">16 g</span>
+            </div>
+            <input type="range" id="inputFat" min="0" max="60" step="1" value="16">
+          </div>
+
+          <!-- Total Energy Summary Pill -->
+          <div style="background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-sm); padding: 10px; display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+            <span style="font-size: 12px; color: var(--text-muted);">Total Estimated Calories:</span>
+            <span style="font-size: 16px; font-weight: 700; color: #fff;" id="totalCaloriesVal">460 kcal</span>
+          </div>
+        </div>
+
+        <button id="btnRunSimulation" class="btn-primary">
+          <span>🔮</span> Run Causal What-If Forecast →
+        </button>
+
+      </section>
+
+      <!-- ==============================================================
+           SCREEN 3: CAUSAL WHAT-IF SCENARIO SIMULATOR (FLAGSHIP MODULE)
+           ============================================================== -->
+      <section id="screen-simulator" class="app-screen">
+        
+        <!-- Chart Card -->
+        <div class="glass-card forecast-chart-card">
+          <div class="chart-header-row">
+            <div>
+              <h2 style="font-size: 14px; font-weight: 700; color: #fff;">120-Min Glycemic Trajectory</h2>
+              <div style="font-size: 11px; color: var(--text-dim);" id="simMealSummary">Meal: 55g Carbs | G0: 118 mg/dL</div>
+            </div>
+            <span class="section-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success); border-color: rgba(16, 185, 129, 0.3);">
+              Target: 70-180
+            </span>
+          </div>
+
+          <!-- Color Legends -->
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-color" style="background: #ef4444;"></span> Baseline</div>
+            <div class="legend-item"><span class="legend-color" style="background: #f97316;"></span> -50% Carbs</div>
+            <div class="legend-item"><span class="legend-color" style="background: #10b981;"></span> +30m Walk</div>
+            <div class="legend-item"><span class="legend-color" style="background: #3b82f6;"></span> Combined</div>
+          </div>
+
+          <!-- Interactive HTML5 Canvas Plot -->
+          <div class="canvas-container">
+            <canvas id="trajectoryCanvas"></canvas>
+            <div id="scrubberTooltip" class="scrubber-tooltip">t: 60m | 142 mg/dL</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); margin-top: 6px;">
+            <span>0m (Meal)</span>
+            <span>30m</span>
+            <span>60m (Peak)</span>
+            <span>90m</span>
+            <span>120m (Recovery)</span>
+          </div>
+        </div>
+
+        <!-- Real-Time Counterfactual Intervention Sliders -->
+        <div class="glass-card">
+          <h3 style="font-size: 13px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <span>🎛️</span> Live Counterfactual Controls
+          </h3>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span style="font-size: 11.5px;">Carbohydrate Reduction</span>
+              <span class="slider-badge" style="background: rgba(249, 115, 22, 0.15); color: #f97316;" id="valSimCarbRed">50%</span>
+            </div>
+            <input type="range" id="inputSimCarbRed" min="0" max="80" step="5" value="50">
+          </div>
+
+          <div class="slider-group" style="margin-bottom: 6px;">
+            <div class="slider-label-row">
+              <span style="font-size: 11.5px;">Post-Meal Walk Duration</span>
+              <span class="slider-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981;" id="valSimWalkMins">30 mins</span>
+            </div>
+            <input type="range" id="inputSimWalkMins" min="0" max="60" step="5" value="30">
+          </div>
+        </div>
+
+        <!-- Ranked Counterfactual Scenarios -->
+        <div class="section-header" style="margin-top: 6px;">
+          <h3 class="section-title">
+            <span>🏆</span> Ranked Intervention Scenarios
+          </h3>
+          <span style="font-size: 11px; color: var(--text-dim);">By Clinical Utility</span>
+        </div>
+
+        <div id="scenariosContainer">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Clinical Recommendation Alert -->
+        <div class="ai-recommendation-box" id="aiRecommendationBox">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+          </svg>
+          <div id="aiRecommendationText">
+            <strong>Personalized Intervention:</strong> A 30-minute brisk walk after eating eliminates glycemic excursion, lowering peak spike from 168 mg/dL to 134 mg/dL while keeping you 100% in target range.
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==============================================================
+           SCREEN 4: GUT MICROBIOME VAE & METABOLIC RADAR
+           ============================================================== -->
+      <section id="screen-microbiome" class="app-screen">
+        
+        <div class="section-header">
+          <h2 class="section-title">
+            <span>🧬</span> Gut Microbiome VAE Manifold
+          </h2>
+          <span class="section-badge" style="background: rgba(139, 92, 246, 0.15); color: var(--purple); border-color: rgba(139, 92, 246, 0.3);">
+            PyTorch β-VAE
+          </span>
+        </div>
+
+        <!-- Radar Polar Plot Card -->
+        <div class="glass-card">
+          <h3 style="font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 6px;">
+            8-Dimensional Non-Linear Taxonomic Embedding
+          </h3>
+          <div class="radar-container">
+            <canvas id="microbiomeRadarCanvas"></canvas>
+          </div>
+          <p style="font-size: 11px; color: var(--text-dim); text-align: center;">
+            Continuous latent vector (z ∈ ℝ⁸) capturing bacterial consortia and metabolic guilds from 1,979 species.
+          </p>
+        </div>
+
+        <!-- Key Indicator Bacterial Taxa -->
+        <div class="glass-card">
+          <h3 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;">
+            Key Indicator Taxa Driving Digital Twin
+          </h3>
+          <div class="taxa-list-item">
+            <div>
+              <div class="taxa-name">Oxalobacter formigenes</div>
+              <small style="color: var(--text-dim); font-size: 10px;">Regulates gut oxalate & metabolic absorption</small>
+            </div>
+            <span class="taxa-pill">Weight: 0.0614</span>
+          </div>
+          <div class="taxa-list-item">
+            <div>
+              <div class="taxa-name">Furfurilactobacillus rossiae</div>
+              <small style="color: var(--text-dim); font-size: 10px;">Short-chain fatty acid fermenter</small>
+            </div>
+            <span class="taxa-pill">Weight: 0.0617</span>
+          </div>
+          <div class="taxa-list-item">
+            <div>
+              <div class="taxa-name">Lactobacillus mucosae LM1</div>
+              <small style="color: var(--text-dim); font-size: 10px;">Mucosal layer barrier integrity</small>
+            </div>
+            <span class="taxa-pill">Weight: 0.0607</span>
+          </div>
+          <div class="taxa-list-item">
+            <div>
+              <div class="taxa-name">Enterococcus faecalis ARO1</div>
+              <small style="color: var(--text-dim); font-size: 10px;">Bile acid biotransformation guild</small>
+            </div>
+            <span class="taxa-pill">Weight: 0.0613</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==============================================================
+           SCREEN 5: CLINICAL TRUST & SAFETY
+           ============================================================== -->
+      <section id="screen-safety" class="app-screen">
+        
+        <div class="section-header">
+          <h2 class="section-title">
+            <span>🛡️</span> Clinical Safety & Accuracy
+          </h2>
+          <span class="section-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success); border-color: rgba(16, 185, 129, 0.3);">
+            ISO 15197
+          </span>
+        </div>
+
+        <!-- Clinical Safety Compliance Hero Card -->
+        <div class="glass-card" style="border-color: rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.05));">
+          <div style="font-size: 12px; color: var(--text-muted);">Clarke Error Grid Clinical Standard:</div>
+          <div style="font-size: 38px; font-weight: 800; color: var(--success); margin: 6px 0;">98.47%</div>
+          <div style="font-size: 12px; font-weight: 600; color: #fff;">
+            Zone A + Zone B Compliance (Regulatory Threshold: >95%)
+          </div>
+          <p style="font-size: 11px; color: var(--text-dim); margin-top: 6px;">
+            Zero predictions fell into Zone D (erroneous treatment) or Zone E (dangerous clinical outcome).
+          </p>
+        </div>
+
+        <!-- Benchmark Comparison Table Card -->
+        <div class="glass-card">
+          <h3 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;">
+            120-Min Trajectory Performance Comparison
+          </h3>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-dim);">
+                  <th style="padding: 6px 4px;">Architecture</th>
+                  <th style="padding: 6px 4px;">MAE</th>
+                  <th style="padding: 6px 4px;">Peak MAE</th>
+                  <th style="padding: 6px 4px;">Zone A+B</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                  <td style="padding: 6px 4px; color: var(--text-muted);">MLP Baseline</td>
+                  <td style="padding: 6px 4px;">22.16</td>
+                  <td style="padding: 6px 4px;">31.68</td>
+                  <td style="padding: 6px 4px;">97.8%</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                  <td style="padding: 6px 4px; color: var(--text-muted);">LSTM Model</td>
+                  <td style="padding: 6px 4px;">24.46</td>
+                  <td style="padding: 6px 4px;">31.87</td>
+                  <td style="padding: 6px 4px;">97.1%</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                  <td style="padding: 6px 4px; color: var(--text-muted);">GRU Model</td>
+                  <td style="padding: 6px 4px;">27.82</td>
+                  <td style="padding: 6px 4px;">37.61</td>
+                  <td style="padding: 6px 4px;">95.7%</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04); background: rgba(6, 182, 212, 0.05);">
+                  <td style="padding: 6px 4px; font-weight: 600; color: var(--primary);">Transformer (PCA)</td>
+                  <td style="padding: 6px 4px; font-weight: 600; color: var(--primary);">19.52</td>
+                  <td style="padding: 6px 4px; font-weight: 600; color: var(--primary);">26.27</td>
+                  <td style="padding: 6px 4px; font-weight: 600; color: var(--primary);">96.4%</td>
+                </tr>
+                <tr style="background: rgba(16, 185, 129, 0.1); font-weight: 700;">
+                  <td style="padding: 6px 4px; color: var(--success);">Transformer + VAE</td>
+                  <td style="padding: 6px 4px; color: var(--success);">19.37</td>
+                  <td style="padding: 6px 4px; color: var(--success);">24.73</td>
+                  <td style="padding: 6px 4px; color: var(--success);">98.5%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size: 10px; color: var(--text-dim); margin-top: 8px;">
+            * Evaluated on 1,633 meal events across 5-Fold Group K-Fold Cross-Validation on unseen subjects.
+          </p>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Fixed Mobile Bottom Navigation Bar -->
+    <nav class="bottom-nav-bar" role="navigation" aria-label="Main Navigation">
+      <button class="nav-tab-btn active" data-tab="screen-dashboard" aria-label="Dashboard">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        <span>Home</span>
+      </button>
+
+      <button class="nav-tab-btn" data-tab="screen-meals" aria-label="Meal Logger">
+        <svg viewBox="0 0 24 24">
+          <path d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.48l1.62-13.48c.11-.9-.59-1.69-1.5-1.69h-3.41V4c0-1.1-.9-2-2-2h-8c-1.1 0-2 .9-2 2v2.34H2.03c-.91 0-1.61.79-1.5 1.69l1.62 13.48c.1.84.79 1.48 1.63 1.48h1.66v-6.33c0-.92.75-1.67 1.67-1.67h8.17c.92 0 1.67.75 1.67 1.67v6.33z"/>
+        </svg>
+        <span>Meals</span>
+      </button>
+
+      <button class="nav-tab-btn" data-tab="screen-simulator" aria-label="Simulator">
+        <svg viewBox="0 0 24 24">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/>
+        </svg>
+        <span>Simulator</span>
+      </button>
+
+      <button class="nav-tab-btn" data-tab="screen-microbiome" aria-label="Microbiome VAE">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+        <span>Gut Twin</span>
+      </button>
+
+      <button class="nav-tab-btn" data-tab="screen-safety" aria-label="Clinical Safety">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+        </svg>
+        <span>Trust</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

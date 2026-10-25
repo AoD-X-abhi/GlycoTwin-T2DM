@@ -8,10 +8,14 @@ def load_and_preprocess_sequences(
     processed_dir="data/processed",
     pre_window_mins=60,
     post_window_mins=120,
-    downsample_factor=5
+    downsample_factor=5,
+    microbiome_mode='pca'
 ):
     """
     Extracts multi-horizon continuous time-series trajectories and static metadata for all meals.
+    
+    Parameters:
+    - microbiome_mode: 'pca' (8 linear PCs), 'vae' (8 non-linear VAE latents), or 'both' (16 components).
     
     Returns:
     - pre_sequences: np.ndarray of shape (N, 60, 3) -> [Unified GL, HR, METs]
@@ -28,6 +32,13 @@ def load_and_preprocess_sequences(
         'subject', 'timestamp', 'meal_type', 'target_peak_glucose',
         'target_glucose_rise', 'target_time_to_peak', 'target_iauc', 'Self-identify'
     ]
+    
+    if microbiome_mode == 'pca':
+        exclude_cols += [c for c in master_df.columns if c.startswith('Microbiome_VAE')]
+    elif microbiome_mode == 'vae':
+        exclude_cols += [c for c in master_df.columns if c.startswith('Microbiome_PC')]
+    elif microbiome_mode == 'none':
+        exclude_cols += [c for c in master_df.columns if c.startswith('Microbiome_PC') or c.startswith('Microbiome_VAE')]
     
     # One-hot encode Gender if present
     df_static = master_df.copy()

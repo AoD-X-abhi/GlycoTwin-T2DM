@@ -1,0 +1,334 @@
+{
+  "11": {
+    "id": 11,
+    "label": "Subject 011 (Pre-diabetes)",
+    "group": "Pre-diabetes",
+    "age": 34,
+    "gender": "M",
+    "bmi": 29.16271975,
+    "hba1c": 5.7,
+    "fasting_glu": 109.0,
+    "insulin": 11.6,
+    "lipid_panel": {
+      "cholesterol": 205.0,
+      "triglycerides": 247.0,
+      "hdl": 36.0
+    },
+    "current_glucose": 112.3,
+    "target_range": {
+      "min": 70,
+      "max": 180
+    },
+    "tir_daily": 89.4,
+    "heart_rate": 68,
+    "current_mets": 1.2,
+    "microbiome_vae": [
+      -1.5573,
+      3.9321,
+      -1.7308,
+      -1.8087,
+      2.8073,
+      -1.037,
+      0.8521,
+      1.3298
+    ],
+    "microbial_richness": 365,
+    "butyrate_score": 2,
+    "gut_health_score": 1,
+    "sample_meals": [
+      {
+        "name": "Morning Oatmeal & Berries",
+        "carbs": 81.0,
+        "protein": 88.0,
+        "fat": 54.5,
+        "fiber": 18.0,
+        "calories": 1180.0,
+        "baseline_glu": 107.1,
+        "actual_peak": 146.3,
+        "actual_rise": 39.2
+      },
+      {
+        "name": "Chicken & Quinoa Bowl",
+        "carbs": 3.0,
+        "protein": 30.0,
+        "fat": 3.0,
+        "fiber": 0.0,
+        "calories": 150.0,
+        "baseline_glu": 93.5,
+        "actual_peak": 104.5,
+        "actual_rise": 11.0
+      },
+      {
+        "name": "Whole Wheat Pasta & Sauce",
+        "carbs": 66.0,
+        "protein": 22.0,
+        "fat": 10.5,
+        "fiber": 0.0,
+        "calories": 448.0,
+        "baseline_glu": 106.3,
+        "actual_peak": 194.1,
+        "actual_rise": 87.8
+      },
+      {
+        "name": "Avocado & Sourdough Toast",
+        "carbs": 92.0,
+        "protein": 17.0,
+        "fat": 42.0,
+        "fiber": 10.0,
+        "calories": 830.0,
+        "baseline_glu": 96.8,
+        "actual_peak": 163.1,
+        "actual_rise": 66.3
+      }
+    ]
+  },
+  "45": {
+    "id": 45,
+    "label": "Subject 045 (Pre-diabetes)",
+    "group": "Pre-diabetes",
+    "age": 46,
+    "gender": "F",
+    "bmi": 32.88125085,
+    "hba1c": 6.1,
+    "fasting_glu": 148.0,
+    "insulin": 46.4,
+    "lipid_panel": {
+      "cholesterol": 172.0,
+      "triglycerides": 238.0,
+      "hdl": 35.0
+    },
+    "current_glucose": 127.2,
+    "target_range": {
+      "min": 70,
+      "max": 180
+    },
+    "tir_daily": 86.2,
+    "heart_rate": 69,
+    "current_mets": 1.2,
+    "microbiome_vae": [
+      -0.5469,
+      3.3924,
+      3.1981,
+      -1.6787,
+      0.5196,
+      -2.8415,
+      0.7698,
+      1.4038
+    ],
+    "microbial_richness": 145,
+    "butyrate_score": 2,
+    "gut_health_score": 1,
+    "sample_meals": [
+      {
+        "name": "Morning Oatmeal & Berries",
+        "carbs": 23.0,
+        "protein": 7.0,
+        "fat": 1.0,
+        "fiber": 11.0,
+        "calories": 120.0,
+        "baseline_glu": 97.0,
+        "actual_peak": 118.9,
+        "actual_rise": 21.9
+      },
+      {
+        "name": "Chicken & Quinoa Bowl",
+        "carbs": 66.0,
+        "protein": 22.0,
+        "fat": 10.5,
+        "fiber": 0.0,
+        "calories": 448.0,
+        "baseline_glu": 111.5,
+        "actual_peak": 206.0,
+        "actual_rise": 94.5
+      },
+      {
+        "name": "Whole Wheat Pasta & Sauce",
+        "carbs": 92.0,
+        "protein": 17.0,
+        "fat": 42.0,
+        "fiber": 10.0,
+        "calories": 830.0,
+        "baseline_glu": 156.0,
+        "actual_peak": 156.0,
+        "actual_rise": 0.0
+      },
+      {
+        "name": "Avocado & Sourdough Toast",
+        "carbs": 6.0,
+        "protein": 2.0,
+        "fat": 0.0,
+        "fiber": 2.0,
+        "calories": 34.0,
+        "baseline_glu": 104.8,
+        "actual_peak": 131.4,
+        "actual_rise": 26.6
+      }
+    ]
+  },
+  "2": {
+    "id": 2,
+    "label": "Subject 002 (Healthy Control)",
+    "group": "Healthy Control",
+    "age": 49,
+    "gender": "F",
+    "bmi": 30.94674189,
+    "hba1c": 5.5,
+    "fasting_glu": 93.0,
+    "insulin": 14.8,
+    "lipid_panel": {
+      "cholesterol": 181.0,
+      "triglycerides": 61.0,
+      "hdl": 91.0
+    },
+    "current_glucose": 88.5,
+    "target_range": {
+      "min": 70,
+      "max": 180
+    },
+    "tir_daily": 91.0,
+    "heart_rate": 70,
+    "current_mets": 1.2,
+    "microbiome_vae": [
+      0.6413,
+      -0.2542,
+      -2.7072,
+      1.7519,
+      -2.4625,
+      2.6102,
+      1.8225,
+      1.0415
+    ],
+    "microbial_richness": 449,
+    "butyrate_score": 1,
+    "gut_health_score": 2,
+    "sample_meals": [
+      {
+        "name": "Morning Oatmeal & Berries",
+        "carbs": 66.0,
+        "protein": 22.0,
+        "fat": 10.5,
+        "fiber": 0.0,
+        "calories": 448.0,
+        "baseline_glu": 88.5,
+        "actual_peak": 144.5,
+        "actual_rise": 56.0
+      },
+      {
+        "name": "Chicken & Quinoa Bowl",
+        "carbs": 92.0,
+        "protein": 17.0,
+        "fat": 42.0,
+        "fiber": 10.0,
+        "calories": 830.0,
+        "baseline_glu": 53.9,
+        "actual_peak": 116.3,
+        "actual_rise": 62.4
+      },
+      {
+        "name": "Whole Wheat Pasta & Sauce",
+        "carbs": 47.0,
+        "protein": 21.0,
+        "fat": 32.0,
+        "fiber": 4.0,
+        "calories": 560.0,
+        "baseline_glu": 79.7,
+        "actual_peak": 109.7,
+        "actual_rise": 30.0
+      },
+      {
+        "name": "Avocado & Sourdough Toast",
+        "carbs": 26.0,
+        "protein": 4.0,
+        "fat": 7.0,
+        "fiber": 0.0,
+        "calories": 191.0,
+        "baseline_glu": 99.5,
+        "actual_peak": 144.2,
+        "actual_rise": 44.7
+      }
+    ]
+  },
+  "22": {
+    "id": 22,
+    "label": "Subject 022 (Pre-diabetes)",
+    "group": "Pre-diabetes",
+    "age": 69,
+    "gender": "F",
+    "bmi": 20.68996219,
+    "hba1c": 5.9,
+    "fasting_glu": 107.0,
+    "insulin": 3.2,
+    "lipid_panel": {
+      "cholesterol": 215.0,
+      "triglycerides": 60.0,
+      "hdl": 106.0
+    },
+    "current_glucose": 102.9,
+    "target_range": {
+      "min": 70,
+      "max": 180
+    },
+    "tir_daily": 87.8,
+    "heart_rate": 72,
+    "current_mets": 1.2,
+    "microbiome_vae": [
+      1.7435,
+      1.802,
+      1.7633,
+      -1.4277,
+      -5.4826,
+      0.3733,
+      -2.3538,
+      -0.0535
+    ],
+    "microbial_richness": 109,
+    "butyrate_score": 2,
+    "gut_health_score": 2,
+    "sample_meals": [
+      {
+        "name": "Morning Oatmeal & Berries",
+        "carbs": 81.0,
+        "protein": 88.0,
+        "fat": 54.5,
+        "fiber": 18.0,
+        "calories": 1180.0,
+        "baseline_glu": 90.6,
+        "actual_peak": 111.0,
+        "actual_rise": 20.4
+      },
+      {
+        "name": "Chicken & Quinoa Bowl",
+        "carbs": 1.7,
+        "protein": 0.8,
+        "fat": 1.1,
+        "fiber": 0.1,
+        "calories": 28.0,
+        "baseline_glu": 78.1,
+        "actual_peak": 114.6,
+        "actual_rise": 36.5
+      },
+      {
+        "name": "Whole Wheat Pasta & Sauce",
+        "carbs": 66.0,
+        "protein": 22.0,
+        "fat": 10.5,
+        "fiber": 0.0,
+        "calories": 448.0,
+        "baseline_glu": 115.3,
+        "actual_peak": 183.7,
+        "actual_rise": 68.4
+      },
+      {
+        "name": "Avocado & Sourdough Toast",
+        "carbs": 92.0,
+        "protein": 17.0,
+        "fat": 42.0,
+        "fiber": 10.0,
+        "calories": 830.0,
+        "baseline_glu": 97.9,
+        "actual_peak": 130.5,
+        "actual_rise": 32.7
+      }
+    ]
+  }
+}
