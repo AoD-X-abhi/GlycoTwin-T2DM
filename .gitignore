@@ -28,6 +28,7 @@ data/processed/*.npz
 # Reports, Literature Summaries, and Internal Notes
 literature_review_*
 literature_survey_*
+literature Review Papers/
 Project_Modules_and_Phases.md
 
 # IDE and OS settings
