@@ -1,15 +1,15 @@
 \label{chap:results_benchmarks}
 
 \section{Experimental Setup and Evaluation Protocol}
-To establish true clinical generalizability, evaluating predictive performance on randomly shuffled meal splits is strictly unacceptable: if meal events from the same human subject appear in both training and test sets, models trivially memorize patient-specific baseline glucose levels and metabolic phenotypes. 
+When testing blood glucose forecasting models, standard random train-test splits are not appropriate. If meals from the same individual appear in both the training set and the test set, the model can simply memorize that person's typical glucose range instead of learning real physiological relationships.
 
-In this thesis, all deep learning architectures were evaluated using \textbf{5-Fold Group K-Fold Cross-Validation grouped strictly by Subject ID}. In each fold:
+To ensure our model generalizes well to new individuals, we used a \textbf{5-Fold Group K-Fold Cross-Validation scheme split by Subject ID}. In every fold:
 \begin{itemize}
-    \item Models are trained on approximately 36 participants ($\sim 1,306$ meal events).
-    \item Models are validated and tested on 9 completely \textbf{unseen participants} ($\sim 327$ meal events).
-    \item There is absolute zero participant overlap between training and testing partitions.
+    \item We trained the model on about 36 participants (around 1,306 meal events).
+    \item We evaluated the model on 9 completely unseen participants (around 327 meal events).
+    \item No participant was included in both the training and testing sets at the same time.
 \end{itemize}
-Performance metrics reported represent the aggregate out-of-sample performance across all 1,633 meal events.
+The performance numbers presented in this chapter are aggregated across all 1,633 meal events evaluated out-of-sample.
 
 \section{Comparative Baseline Architectures}
 We implemented and benchmarked three competitive neural baselines under identical cross-validation folds and feature sets:

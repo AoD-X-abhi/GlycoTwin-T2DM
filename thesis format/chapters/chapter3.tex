@@ -104,22 +104,22 @@ We implemented an automated normalization filter: all records with \texttt{Amoun
 \end{equation}
 
 \section{Meal Event Window Slicing Protocol}
-Every timestamp in the synchronized timeline containing logged $\text{Carbohydrates} > 0$ grams was isolated as an experimental meal event. To prevent physiological overlap from subsequent snacking, events with consecutive meals logged within 90 minutes were flagged and merged. Across the 45 participants, a total of \textbf{1,633 discrete postprandial meal events} were identified.
+We identified a meal event whenever a logged entry had carbohydrates greater than zero grams. If two meals were logged within 90 minutes of each other, we merged them to avoid overlapping digestive responses from snacking. Across the 45 participants in the dataset, this gave a total of \textbf{1,633 distinct meal events}.
 
-For each meal event occurring at timestamp $t_{\text{meal}}$, we sliced two continuous windows:
+For each meal logged at time $t_{\text{meal}}$, we extracted two specific time windows:
 \begin{enumerate}
-    \item \textbf{Pre-Meal Dynamic Sequence ($\mathbf{X}_{\text{seq}} \in \mathbb{R}^{60 \times 3}$):} A 60-minute historical sequence spanning $[t_{\text{meal}}-60\text{m}, t_{\text{meal}}]$ at 1-minute resolution, tracking:
+    \item \textbf{Pre-Meal Dynamic History ($\mathbf{X}_{\text{seq}} \in \mathbb{R}^{60 \times 3}$):} A 60-minute window before the meal, from $[t_{\text{meal}}-60\text{m}, t_{\text{meal}}]$, recorded at 1-minute intervals. It includes:
     \begin{itemize}
-        \item Unified Glucose Concentration ($G(t)$).
-        \item Heart Rate (BPM).
-        \item Physical Activity (METs).
+        \item Unified glucose readings ($G(t)$).
+        \item Heart rate in beats per minute (BPM).
+        \item Physical activity exertion (METs).
     \end{itemize}
-    This sequence captures immediate pre-meal glycemic velocity, metabolic momentum, and baseline glucose concentration $G_0 = G(t_{\text{meal}})$.
+    This block gives the model the patient's immediate physical activity, glucose trend, and starting baseline glucose $G_0 = G(t_{\text{meal}})$.
     
-    \item \textbf{Postprandial Excursion Target ($\mathbf{Y}_{\text{traj}} \in \mathbb{R}^{24}$):} A 120-minute postprandial trajectory spanning $[t_{\text{meal}}, t_{\text{meal}}+120\text{m}]$. The raw 120 continuous 1-minute measurements were downsampled at 5-minute intervals, yielding $H = 24$ discrete forecasting steps ($t+5\text{m}, t+10\text{m}, \dots, t+120\text{m}$).
+    \item \textbf{Post-Meal Target Excursion ($\mathbf{Y}_{\text{traj}} \in \mathbb{R}^{24}$):} A 120-minute window after meal start, from $[t_{\text{meal}}, t_{\text{meal}}+120\text{m}]$. The 120 raw 1-minute readings were sampled every 5 minutes, resulting in $H = 24$ points ($t+5\text{m}, t+10\text{m}, \dots, t+120\text{m}$) that the model learns to predict.
 \end{enumerate}
 
-Figure \ref{fig:ppgr_extraction} illustrates the dual-window slicing protocol, showing the 60-minute dynamic pre-meal context, the meal ingestion event, and the resulting 120-minute postprandial glycemic excursion curve.
+Figure \ref{fig:ppgr_extraction} illustrates this two-window setup, showing the 60-minute pre-meal inputs, the meal timestamp, and the resulting 120-minute post-meal response curve.
 
 \begin{figure}[!t]
 \centering
@@ -129,11 +129,11 @@ Figure \ref{fig:ppgr_extraction} illustrates the dual-window slicing protocol, s
 \end{figure}
 
 \section{Summary of Static Feature Dimensionality}
-In addition to the dynamic sequence $\mathbf{X}_{\text{seq}}$, each meal event is associated with a static patient-meal vector $\mathbf{x}_{\text{stat}} \in \mathbb{R}^{61}$ comprising:
+Alongside the 60-minute dynamic inputs $\mathbf{X}_{\text{seq}}$, each meal sample includes a 61-dimensional static feature vector $\mathbf{x}_{\text{stat}} \in \mathbb{R}^{61}$ covering patient traits and nutritional values:
 \begin{itemize}
-    \item \textbf{Dietary Features (7):} Net Carbohydrates, Dietary Fiber, Free Sugar, Fat, Protein, Total Calories (kcal), and Carb-to-Fiber Ratio.
-    \item \textbf{Anthropometric Features (4):} Age, Gender (one-hot encoded), Body Mass Index (BMI), and Weight.
-    \item \textbf{Clinical Diagnostic Panel (20):} FPG, Fasting Insulin, HOMA-IR, HbA1c, Total Cholesterol, HDL, LDL, Triglycerides, and complete blood counts.
-    \item \textbf{Microbiome Functional Pathways (22):} Functional capacity indices including Butyrate Synthesis and LPS Biosynthesis.
+    \item \textbf{Dietary Nutrients (7 features):} Net carbohydrates, dietary fiber, sugar, fat, protein, total calories, and the ratio of carbs to fiber.
+    \item \textbf{Body Measurements (4 features):} Age, gender (one-hot encoded), body mass index (BMI), and weight in kilograms.
+    \item \textbf{Clinical Blood Panel (20 features):} Fasting glucose, fasting insulin, HOMA-IR, HbA1c, lipid profiles (cholesterol, HDL, LDL, triglycerides), and complete blood count numbers.
+    \item \textbf{Gut Functional Scores (22 features):} Biological pathway scores, including butyrate synthesis and LPS production capacity.
     \item \textbf{Microbiome Representation Latents (8):} The 8-dimensional continuous latent vector ($\mathbf{z}_{\text{microbiome}} \in \mathbb{R}^8$) derived via our deep $\beta$-Variational Autoencoder (detailed in Chapter \ref{chap:microbiome_vae}).
 \end{itemize}

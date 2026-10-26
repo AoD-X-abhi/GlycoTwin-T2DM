@@ -95,8 +95,8 @@ The $\beta$-VAE was trained for 150 epochs using the AdamW optimizer ($\text{lr}
     \item \textbf{Loss Convergence (Panels A \& B):} Total loss and KL divergence smoothly converge without numerical instability or posterior collapse.
     \item \textbf{Latent Manifold Clustering (Panel C):} 2D PCA projection of the 8-dimensional latent space reveals distinct, continuous clustering corresponding to the three metabolic phenotypes (Healthy, Pre-diabetes, and T2D).
     \item \textbf{Reconstruction ROC and PR Curves (Panel D):} On uncorrupted taxonomic profiles, the model achieves an empirical \textbf{ROC-AUC of 1.0000} and \textbf{PR-AUC of 1.0000}, confirming flawless capacity to recover species indicators.
-    \item \textbf{Latent Feature Distribution (Panel E):} Boxplots across all 8 latent dimensions demonstrate active utilization of all channels without inactive/dead dimensions.
-    \item \textbf{Top Taxa Drivers (Panel F):} Weight analysis identifies key metabolic regulators governing the latent manifold, including \emph{Oxalobacter formigenes} (weight 0.0614, protects against hyperoxaluria and gut inflammation), \emph{Furfurilactobacillus rossiae} (weight 0.0617), and \emph{Enterococcus faecalis} (weight 0.0613).
+    \item \textbf{Latent Feature Spread (Panel E):} Boxplots across the 8 latent variables show that each dimension remains active and has measurable spread, confirming that no latent channels died out during training.
+    \item \textbf{Key Bacterial Species (Panel F):} By checking the model weights, we found several notable bacteria influencing the latent coordinates, including \emph{Oxalobacter formigenes} (weight 0.0614), \emph{Furfurilactobacillus rossiae} (weight 0.0617), and \emph{Enterococcus faecalis} (weight 0.0613).
 \end{itemize}
 
 \begin{figure*}[!t]
@@ -107,8 +107,8 @@ The $\beta$-VAE was trained for 150 epochs using the AdamW optimizer ($\text{lr}
 \end{figure*}
 
 \section{Exporting Digital Twin Latent Features}
-For downstream integration into our time-series forecasting architecture, the stochastic sampling is made deterministic. For each participant $i$, the trained encoder evaluates their uncorrupted taxonomic vector $\mathbf{x}_i$ and exports the deterministic mean vector:
+To use the trained microbiome encoder in our glucose prediction models, we extract the latent values deterministically without random sampling noise. For each patient $i$, the encoder takes their bacterial vector $\mathbf{x}_i$ and outputs the mean vector:
 \begin{equation}
     \mathbf{z}_{\text{microbiome}, i} = \boldsymbol{\mu}_i \in \mathbb{R}^8
 \end{equation}
-This 8-dimensional continuous vector is integrated into the master feature dataset, enriching each meal event with a compressed, non-linear representation of the patient's gut microbial capacity.
+This provides an 8-number summary of each patient's gut profile, which we then append to the static feature set for each meal.

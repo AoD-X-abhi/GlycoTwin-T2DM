@@ -3,8 +3,8 @@
 \section{System Overview and Architectural Philosophy}
 Continuous forecasting of postprandial glycemic excursions requires an architecture capable of processing two fundamentally disparate data types:
 \begin{enumerate}
-    \item \textbf{Dynamic Continuous Streams ($\mathbf{X}_{\text{seq}} \in \mathbb{R}^{60 \times 3}$):} High-frequency (1-minute) historical sequence of blood glucose, heart rate, and METs tracking immediate pre-meal physiological momentum.
-    \item \textbf{High-Dimensional Static Covariates ($\mathbf{x}_{\text{stat}} \in \mathbb{R}^{61}$):} Granular meal macronutrient quantities, baseline clinical blood panels, anthropometric factors, and the 8-dimensional non-linear gut microbiome $\beta$-VAE latents.
+    \item \textbf{Dynamic Continuous Streams ($\mathbf{X}_{\text{seq}} \in \mathbb{R}^{60 \times 3}$):} A 60-minute historical sequence recorded at 1-minute intervals. It tracks continuous glucose levels, heart rate, and metabolic equivalents (METs) right before a meal to capture the person's current physiological state.
+    \item \textbf{High-Dimensional Static Covariates ($\mathbf{x}_{\text{stat}} \in \mathbb{R}^{61}$):} Fixed features for each meal event, including nutritional values (carbs, protein, fat, fiber, calories), standard clinical lab tests, patient body metrics, and the 8 latent values extracted by our gut microbiome $\beta$-VAE.
 \end{enumerate}
 
 To synthesize these heterogeneous modalities without suffering from the spike dampening and baseline drift common in recurrent networks, we introduce \textbf{TransformerForecaster}. Figure \ref{fig:methodology_flowchart} provides an end-to-end architectural schematic of the pipeline, from raw telemetry ingestion to continuous postprandial trajectory prediction.
@@ -32,7 +32,7 @@ The dynamic vectors are projected into a $d_{\text{model}} = 64$ dimensional emb
 for temporal step $t \in \{1, \dots, 60\}$ and channel index $i \in \{0, \dots, 31\}$.
 
 \subsection{Multi-Head Self-Attention (MHSA) Layers}
-The sequence passes through a stack of $L = 2$ Transformer Encoder layers. Each layer consists of a Multi-Head Self-Attention (MHSA) block with $h = 4$ parallel attention heads ($d_k = d_{\text{model}} / h = 16$), followed by a position-wise Feed-Forward Network (FFN) with Gaussian Error Linear Unit (GELU) activation and inner expansion dimension $d_{\text{ff}} = 128$:
+We pass the embedded input through $L = 2$ Transformer Encoder layers. Each layer uses a Multi-Head Self-Attention (MHSA) block with $h = 4$ parallel heads (giving head dimension $d_k = d_{\text{model}} / h = 16$). After attention, the features pass through a feed-forward network (FFN) with Gaussian Error Linear Unit (GELU) non-linearity and a hidden dimension of $d_{\text{ff}} = 128$:
 \begin{align}
     \mathbf{Q}_i &= \mathbf{E}_{l-1} \mathbf{W}_i^Q, \quad \mathbf{K}_i = \mathbf{E}_{l-1} \mathbf{W}_i^K, \quad \mathbf{V}_i = \mathbf{E}_{l-1} \mathbf{W}_i^V \\
     \text{head}_i &= \text{softmax}\left(\frac{\mathbf{Q}_i \mathbf{K}_i^T}{\sqrt{d_k}}\right) \mathbf{V}_i \\
@@ -41,23 +41,23 @@ The sequence passes through a stack of $L = 2$ Transformer Encoder layers. Each 
 \end{align}
 
 \subsection{Temporal Context Pooling}
-To distill the 60-minute contextual dynamic representations into a unified temporal state vector, we perform mean pooling across the time dimension:
+To summarize the 60 time steps into a single vector representing the pre-meal state, we apply average pooling across the temporal dimension:
 \begin{equation}
     \mathbf{h}_{\text{temp}} = \frac{1}{60} \sum_{t=1}^{60} \mathbf{E}_{L, t} \in \mathbb{R}^{64}
 \end{equation}
-The resulting vector $\mathbf{h}_{\text{temp}}$ encapsulates pre-meal glucose momentum, glucose derivative slope, and immediate physical activity state.
+This pooled vector $\mathbf{h}_{\text{temp}}$ holds summary information about pre-meal glucose trends, recent physical activity, and heart rate patterns.
 
 \section{Gated Residual Network (GRN) for Static Modalities}
-The static patient-meal vector $\mathbf{x}_{\text{stat}} \in \mathbb{R}^{61}$ combines dietary macronutrient grams, clinical laboratory blood diagnostics, anthropometrics, and the 8-dimensional gut microbiome $\beta$-VAE latent vector ($\mathbf{z}_{\text{microbiome}}$). 
+The static input vector $\mathbf{x}_{\text{stat}} \in \mathbb{R}^{61}$ includes meal nutritional values, clinical lab tests, patient body metrics, and the 8-dimensional gut microbiome latent features ($\mathbf{z}_{\text{microbiome}}$). 
 
-Directly concatenating high-dimensional static variables into deep models often leads to gradient contamination, as noisy or irrelevant biomarkers degrade predictions. To address this, we process static covariates through a \textbf{Gated Residual Network (GRN)} \cite{lim2021temporal}. The GRN provides non-linear feature transformation with adaptive gating, enabling the digital twin to selectively amplify critical biomarkers (e.g., net carbohydrates and HOMA-IR) while suppressing uninformative features:
+If we simply concatenate these 61 static variables directly into the neural network, less informative or noisy features can hurt the model's performance. To handle this, we process static covariates with a \textbf{Gated Residual Network (GRN)} \cite{lim2021temporal}. The GRN learns non-linear combinations of features while using a gating mechanism to suppress irrelevant signals and let key predictors (like meal carbohydrates or insulin resistance markers) pass through:
 \begin{align}
     \mathbf{\eta}_1 &= \text{ELU}(\mathbf{W}_1 \mathbf{x}_{\text{stat}} + \mathbf{b}_1) \in \mathbb{R}^{64} \\
     \mathbf{\eta}_2 &= \text{Dropout}\big(\mathbf{W}_2 \mathbf{\eta}_1 + \mathbf{b}_2, p=0.1\big) \in \mathbb{R}^{64} \\
     \mathbf{g} &= \sigma(\mathbf{W}_g \mathbf{\eta}_2 + \mathbf{b}_g) \in \mathbb{R}^{64} \quad \text{(Gating Mechanism)} \\
     \mathbf{h}_{\text{stat}} &= \text{LayerNorm}\Big(\mathbf{W}_{\text{skip}} \mathbf{x}_{\text{stat}} + \mathbf{g} \odot \mathbf{\eta}_2\Big) \in \mathbb{R}^{64}
 \end{align}
-where $\text{ELU}(x) = \max(0, x) + \min(0, \exp(x) - 1)$ provides smooth non-linear gradients for negative values, $\sigma(\cdot)$ is the sigmoid activation controlling feature gating, and $\mathbf{W}_{\text{skip}} \in \mathbb{R}^{64 \times 61}$ is a linear skip connection preserving primary linear relationships.
+Here, $\text{ELU}(x) = \max(0, x) + \min(0, \exp(x) - 1)$ provides smooth gradients for negative values, $\sigma(\cdot)$ is the sigmoid gating function, and $\mathbf{W}_{\text{skip}} \in \mathbb{R}^{64 \times 61}$ provides a linear skip connection to retain direct linear relationships.
 
 \section{Multi-Modal Fusion and Projection Decoder}
 The dynamic temporal representation $\mathbf{h}_{\text{temp}} \in \mathbb{R}^{64}$ and the gated static representation $\mathbf{h}_{\text{stat}} \in \mathbb{R}^{64}$ are concatenated into a fused multi-modal embedding:
@@ -73,32 +73,34 @@ The fused representation feeds a multi-layer projection decoder composed of dens
 \end{align}
 
 \section{Residual Delta Trajectory Formulation ($\Delta G_t = G_t - G_0$)}
-A primary cause of failure in conventional blood glucose forecasting is \textbf{baseline offset bias}. When networks are tasked with predicting absolute glucose concentrations $\hat{G}(t)$ directly, they encounter a severe variance discrepancy: baseline fasting glucose fluctuates widely between participants (e.g., $85\text{ mg/dL}$ in healthy subjects versus $165\text{ mg/dL}$ in uncontrolled T2D). Faced with this high inter-subject variance, unconstrained models minimize average MSE by collapsing to the global population mean ($\approx 120\text{ mg/dL}$). Consequently, healthy subjects are over-predicted, diabetic subjects are under-predicted, and postprandial spikes are entirely flattened.
+One major difficulty when predicting post-meal blood glucose directly is \textbf{baseline offset bias}. Different patients start meals at very different starting glucose levels—ranging from roughly $85\text{ mg/dL}$ in healthy subjects to over $160\text{ mg/dL}$ in uncontrolled type 2 diabetes. When a model tries to predict raw absolute values $\hat{G}(t)$ directly across all patients, standard loss functions often cause it to predict values close to the overall dataset average ($\approx 120\text{ mg/dL}$). This leads to over-predicting healthy participants, under-predicting diabetic participants, and flattening out the post-meal peaks.
 
-To completely eradicate baseline offset bias, we formulate the forecasting target strictly as a \textbf{relative postprandial glucose excursion rise}:
+To avoid this problem, we train the model to predict the \textbf{relative post-meal glucose rise}:
 \begin{equation}
     \Delta G(t) = G(t) - G_0, \quad \forall t \in \{5, 10, 15, \dots, 120\text{ min}\}
 \end{equation}
-where $G_0 = G(t_{\text{meal}})$ is the exact baseline glucose measured at the moment of meal ingestion.
+where $G_0 = G(t_{\text{meal}})$ is the glucose reading at the exact start of the meal.
 
-During inference, continuous absolute postprandial glucose curves are reconstructed deterministically without cumulative drift:
+During testing and evaluation, we reconstruct the final predicted glucose curve by adding this change back to the baseline:
 \begin{equation}
     \hat{G}(t) = G_0 + \max\Big(0, \hat{\Delta G}(t)\Big)
 \end{equation}
-The non-negative floor $\max(0, \cdot)$ enforces physiological consistency, ensuring that the model does not predict unphysiological negative glucose excursions immediately following carbohydrate ingestion.
+We include the non-negative threshold $\max(0, \cdot)$ because eating carbohydrates causes glucose to rise rather than drop below the pre-meal baseline during the initial postprandial period.
 
 \section{Multi-Objective Composite Excursion Loss Function}
-Standard Mean Squared Error (MSE) penalizes point-wise deviations uniformly:
+Standard Mean Squared Error (MSE) measures point-by-point errors equally:
 \begin{equation}
     \mathcal{L}_{\text{MSE}} = \frac{1}{H} \sum_{k=1}^{H} \big(\hat{Y}_k - Y_k\big)^2
 \end{equation}
-Under MSE, an algorithm that predicts a completely flat curve passing through the middle of a glycemic excursion achieves a relatively low penalty, despite being clinically disastrous (as it misses the hazardous peak spike entirely).
+In practice, a model trained only on MSE can get an acceptable score simply by predicting a flat line through the middle of the actual curve. However, this misses the highest glucose spike, which is the most critical information for diabetes management.
 
-In clinical diabetology, two features dictate treatment safety:
-1. \textbf{Peak Excursion Magnitude ($G_{\max}$):} The maximum postprandial concentration reached.
-2. \textbf{Glycemic Rate-of-Change ($\nabla G$):} The rate of glucose rise and clearance.
+From a medical perspective, two factors are essential during a post-meal response:
+\begin{enumerate}
+    \item \textbf{Peak Excursion Magnitude ($G_{\max}$):} The highest glucose level reached after the meal.
+    \item \textbf{Glycemic Rate-of-Change ($\nabla G$):} How quickly glucose rises and recovers over time.
+\end{enumerate}
 
-To enforce strict physiological fidelity, we design a multi-objective \textbf{Composite Excursion Loss Function}:
+To make sure our model captures these aspects, we trained it using a \textbf{Composite Excursion Loss Function}:
 \begin{equation}
     \mathcal{L}_{\text{total}} = \mathcal{L}_{\text{MSE}}(\hat{\mathbf{Y}}, \mathbf{Y}) + \lambda_1 \mathcal{L}_{\text{peak}}(\hat{\mathbf{Y}}, \mathbf{Y}) + \lambda_2 \mathcal{L}_{\text{deriv}}(\hat{\mathbf{Y}}, \mathbf{Y})
 \end{equation}
@@ -107,7 +109,7 @@ where:
     \mathcal{L}_{\text{peak}} &= \Big| \max_{k}(\hat{Y}_k) - \max_{k}(Y_k) \Big| \\
     \mathcal{L}_{\text{deriv}} &= \frac{1}{H-1} \sum_{k=1}^{H-1} \Big| (\hat{Y}_{k+1} - \hat{Y}_k) - (Y_{k+1} - Y_k) \Big|^2
 \end{align}
-The hyperparameter weights are set to $\lambda_1 = 0.6$ (penalizing peak excursion discrepancies) and $\lambda_2 = 0.3$ (penalizing velocity derivative errors). This composite formulation compels the network to capture both the exact numerical peak and the trajectory's physiological curve curvature.
+We set the hyperparameter weights to $\lambda_1 = 0.6$ for the peak error and $\lambda_2 = 0.3$ for the slope error. This combined loss encourages the model to accurately predict both the peak value and the overall shape of the curve.
 
 \section{Optimization and Regularization Strategy}
 TransformerForecaster was optimized end-to-end using the \textbf{AdamW optimizer} with decoupled weight decay ($1 \times 10^{-4}$). Training utilized a \textbf{Cosine Annealing Learning Rate Scheduler} with an initial learning rate $\eta_0 = 1 \times 10^{-3}$ decaying to $\eta_{\min} = 1 \times 10^{-5}$ across 120 epochs. Early stopping with a patience of 20 epochs based on validation loss prevented overfitting. Gradient norms were clipped to a maximum threshold of $1.0$ to ensure numerical stability during backpropagation.
