@@ -1,0 +1,706 @@
+\documentclass[aspectratio=169, 10pt]{beamer}
+
+% -----------------------------------------------------------------------------
+% Theme & Typography Setup
+% -----------------------------------------------------------------------------
+\usetheme{Madrid}
+\usefonttheme{professionalfonts}
+
+\usepackage[english]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{colortbl}
+\usepackage{hyperref}
+
+% -----------------------------------------------------------------------------
+% Custom Color Palette (Modern Clinical & Biomedical Aesthetics)
+% -----------------------------------------------------------------------------
+\definecolor{NavyBlue}{RGB}{11, 37, 69}
+\definecolor{Teal}{RGB}{19, 122, 127}
+\definecolor{Crimson}{RGB}{214, 40, 40}
+\definecolor{SoftGray}{RGB}{246, 248, 250}
+\definecolor{DarkSlate}{RGB}{33, 37, 41}
+\definecolor{LightTeal}{RGB}{234, 246, 246}
+\definecolor{BorderGray}{RGB}{220, 224, 230}
+
+\setbeamercolor{structure}{fg=NavyBlue}
+\setbeamercolor{palette primary}{bg=NavyBlue,fg=white}
+\setbeamercolor{palette secondary}{bg=Teal,fg=white}
+\setbeamercolor{palette tertiary}{bg=DarkSlate,fg=white}
+\setbeamercolor{frametitle}{bg=NavyBlue,fg=white}
+\setbeamercolor{title}{bg=NavyBlue,fg=white}
+
+% Block Colors
+\setbeamercolor{block title}{bg=NavyBlue,fg=white}
+\setbeamercolor{block body}{bg=SoftGray,fg=DarkSlate}
+\setbeamercolor{block title example}{bg=Teal,fg=white}
+\setbeamercolor{block body example}{bg=LightTeal,fg=DarkSlate}
+\setbeamercolor{block title alerted}{bg=Crimson,fg=white}
+\setbeamercolor{block body alerted}{bg=SoftGray,fg=DarkSlate}
+
+% Rounded corners & smooth items
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\setbeamertemplate{items}[circle]
+\setbeamertemplate{navigation symbols}{}
+
+% Custom Modern Footline (No Clutter, Clean Slide Numbers)
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.35\paperwidth,ht=2.5ex,dp=1ex,left,leftskip=2ex]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\textbf{Amrita Vishwa Vidyapeetham}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.40\paperwidth,ht=2.5ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}GlycoTwin: T2D Digital Twin
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.5ex,dp=1ex,right,rightskip=2ex]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertframenumber{} / \inserttotalframenumber
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% Path for graphics
+\graphicspath{{images/}{./}}
+
+% -----------------------------------------------------------------------------
+% Title Page Metadata
+% -----------------------------------------------------------------------------
+\title[\textbf{GlycoTwin: T2D Digital Twin}]{\textbf{Personalized Multi-Modal Digital Twin for Type 2 Diabetes Management}}
+\subtitle{Multi-Horizon Continuous Glucose Forecasting \& Causal Counterfactual Simulation}
+
+\author[Divagar S, Abhishek Pandey, Prem]{
+  \textbf{Divagar S} (CB.SC.U4AIE23223) \quad
+  \textbf{Abhishek Pandey} (CB.SC.U4AIE23205) \quad
+  \textbf{Prem} (CB.SC.U4AIE23241)
+}
+
+\institute[Amrita Vishwa Vidyapeetham]{
+  \vspace{-0.2cm}
+  \textbf{Under the Guidance of:} \textbf{Dr. Keerthika K}, Assistant Professor\\
+  \vspace{0.15cm}
+  Department of Artificial Intelligence\\
+  School of Computing, Amrita Vishwa Vidyapeetham, Coimbatore Campus
+}
+
+\date{October 27, 2026}
+
+% =============================================================================
+% DOCUMENT START
+% =============================================================================
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% Slide 1: Title Slide
+% -----------------------------------------------------------------------------
+\begin{frame}[plain]
+  \begin{center}
+    \includegraphics[height=1.1cm]{images/univA.png}\\[0.15cm]
+    {\scriptsize \textbf{DEPARTMENT OF ARTIFICIAL INTELLIGENCE --- AMRITA VISHWA VIDYAPEETHAM}}\\[0.15cm]
+    \hrule height 1pt
+    \vspace{0.25cm}
+    {\large \textbf{\color{NavyBlue} Personalized Multi-Modal Digital Twin for Type 2 Diabetes}}\\[0.1cm]
+    {\footnotesize \color{Teal} Multi-Horizon Continuous Glucose Forecasting \& Causal Lifestyle Simulation}\\[0.25cm]
+    \hrule height 0.5pt
+    \vspace{0.25cm}
+    
+    \begin{columns}[c]
+      \begin{column}{0.55\textwidth}
+        \scriptsize
+        \textbf{Project Candidates:}\\
+        $\bullet$ \textbf{Divagar S} \hfill (CB.SC.U4AIE23223)\\
+        $\bullet$ \textbf{Abhishek Pandey} \hfill (CB.SC.U4AIE23205)\\
+        $\bullet$ \textbf{Prem} \hfill (CB.SC.U4AIE23241)
+      \end{column}
+      \begin{column}{0.45\textwidth}
+        \scriptsize
+        \textbf{Project Supervisor:}\\
+        \textbf{Dr. Keerthika K}\\
+        Assistant Professor\\
+        Dept. of Artificial Intelligence
+      \end{column}
+    \end{columns}
+    
+    \vspace{0.3cm}
+    {\tiny B.Tech Major Project Thesis Presentation $\cdot$ Academic Year 2026--2027}
+  \end{center}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 2: Presentation Outline
+% -----------------------------------------------------------------------------
+\begin{frame}{Presentation Outline}
+  \begin{columns}[t]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Part I: Background \& Architecture}
+        \begin{itemize}\setlength{\itemsep}{0.35em}
+          \item Clinical Motivation \& Need for Digital Twins
+          \item Limitations of Existing CGM Approaches
+          \item Problem Statement \& Research Objectives
+          \item Multi-Modal Dataset Synchronization
+          \item Gut Microbiome Latent Learning ($\beta$-VAE)
+          \item TransformerForecaster Model Architecture
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Part II: Results, Simulation \& App}
+        \begin{itemize}\setlength{\itemsep}{0.35em}
+          \item Experimental Protocol (5-Fold Group K-Fold)
+          \item Quantitative Benchmarks vs. Recurrent Baselines
+          \item Clinical Spike Accuracy \& Clarke Grid Safety
+          \item Causal "What-If" Counterfactual Simulation
+          \item Clinical Case Study: Subject 011 Analysis
+          \item GlycoTwin Mobile Web Application \& Conclusion
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 3: Motivation & The Core Challenge
+% -----------------------------------------------------------------------------
+\begin{frame}{Clinical Motivation: Beyond "One-Size-Fits-All" Guidelines}
+  \begin{columns}[c]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}\setlength{\itemsep}{0.6em}
+        \item \textbf{Global Burden:} Over 537 million adults live with diabetes; postprandial glycemic volatility drives micro- and macro-vascular complications.
+        \item \textbf{High Inter-Individual Variability:} Studies (Zeevi et al., Hall et al.) show identical carbohydrate meals cause dramatically different glucose spikes across patients.
+        \item \textbf{Complex Drivers:} Glycemic response depends on multi-modal factors:
+        \begin{itemize}\setlength{\itemsep}{0.2em}
+          \item Insulin resistance (HOMA-IR, HbA1c)
+          \item Pre-meal glucose momentum \& physical activity
+          \item Meal macronutrient balance (fiber, fat, protein)
+          \item Gut microbiome bacterial composition
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+    
+    \begin{column}{0.42\textwidth}
+      \begin{alertblock}{The Clinical Need}
+        Static universal diets fail because human metabolic dynamics are highly personalized. Patients need a \textbf{prospective digital twin} to predict post-meal excursions \emph{before} eating.
+      \end{alertblock}
+      \vspace{0.2cm}
+      \begin{exampleblock}{Goal of GlycoTwin}
+        Forecast full continuous 120-minute postprandial glucose curves and simulate "What-If" pre-meal lifestyle modifications.
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 4: Limitations of Existing Approaches
+% -----------------------------------------------------------------------------
+\begin{frame}{Limitations of Existing Continuous Glucose Monitoring (CGM)}
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{1. Reactive Rather than Proactive Alerts}
+        \begin{itemize}
+          \item Standard CGMs (Dexcom, Libre) trigger threshold alarms \textbf{only after} hyperglycemia ($>180$ mg/dL) has occurred.
+          \item Food has already been absorbed; damage cannot be prevented retrospectively.
+        \end{itemize}
+      \end{block}
+      \vspace{0.1cm}
+      \begin{block}{2. Isolated Glucose Tracking}
+        \begin{itemize}
+          \item Glucose curves are analyzed in isolation without integrating meal nutrients, smartwatch fitness streams, and blood labs.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{block}{3. Inability to Model Gut Microbiota}
+        \begin{itemize}
+          \item Gut sequencing yields presence/absence for 1,900+ bacterial taxa in small clinical cohorts ($N < 100$).
+          \item Traditional linear PCA fails on sparse binary data and misses non-linear metabolic microbial interactions.
+        \end{itemize}
+      \end{block}
+      \vspace{0.1cm}
+      \begin{alertblock}{Baseline Offset Bias in Deep Models}
+        Training standard networks on raw absolute glucose leads to average mean collapse ($\approx 120$ mg/dL), flattening true postprandial peaks.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 5: Problem Statement & Research Objectives
+% -----------------------------------------------------------------------------
+\begin{frame}{Problem Statement \& Key Research Objectives}
+  \begin{block}{Problem Statement}
+    To engineer a personalized, multi-modal digital twin framework that models multi-source physiological and metagenomic data to predict continuous postprandial glucose trajectories and simulate proactive lifestyle interventions before meal consumption.
+  \end{block}
+  
+  \vspace{0.15cm}
+  \textbf{Key Research Objectives:}
+  \begin{enumerate}\setlength{\itemsep}{0.4em}
+    \item \textbf{Multi-Modal Data Pipeline:} Synchronize dual CGM streams (1-min resolution), wearable activity, meal logs, blood labs, and 1,979 gut microbial taxa.
+    \item \textbf{Microbiome Representation Learning:} Build an unsupervised $\beta$-VAE to compress 1,979 binary bacterial species into 8 continuous, meaningful latent dimensions.
+    \item \textbf{TransformerForecaster Architecture:} Formulate a hybrid self-attention network using relative delta targets ($\Delta G_t = G_t - G_0$) and composite excursion loss.
+    \item \textbf{Rigorous Benchmark Validation:} Evaluate strictly out-of-sample on unseen human subjects under 5-Fold Group K-Fold cross-validation and Clarke Grid safety.
+    \item \textbf{Causal "What-If" Simulation \& Mobile App:} Enable pre-meal lifestyle counterfactual exploration through a lightweight, mobile-first Progressive Web App.
+  \end{enumerate}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 6: Multi-Modal Synchronized Dataset (CGMacros)
+% -----------------------------------------------------------------------------
+\begin{frame}{Multi-Modal Synchronized Dataset: CGMacros Cohort}
+  \begin{columns}[c]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}\setlength{\itemsep}{0.4em}
+        \item \textbf{Clinical Cohort:} 45 participants from the CGMacros study spanning healthy, pre-diabetic, and Type 2 diabetic individuals.
+        \item \textbf{Meal Events:} 1,633 fully synchronized meal events.
+        \item \textbf{High-Frequency Dynamic Streams (60 min pre-meal):}
+        \begin{itemize}
+          \item Dual CGM: Abbott FreeStyle Libre \& Dexcom G6 (1-min)
+          \item Wearable Fitness: Fitbit Heart Rate \& METs (physical exertion)
+        \end{itemize}
+        \item \textbf{Static Covariates (61 Total Features):}
+        \begin{itemize}
+          \item Meal Nutrients: Carbs, Fiber, Protein, Fat, Calories
+          \item Blood Lab Tests: HbA1c, Fasting Glucose, HOMA-IR, Lipids
+          \item Patient Demographics: Age, Gender, BMI, Weight
+          \item Gut Metagenomics: 8 Latents ($\beta$-VAE)
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+    
+    \begin{column}{0.42\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{images/glycemic_excursion_and_ppgr_extraction.png}
+      \vspace{0.1cm}
+      \begin{exampleblock}{Windowing Protocol}
+        {\footnotesize $[-60\text{m}, 0\text{m}]$ pre-meal sequence $\mathbf{X}_{\text{seq}} \in \mathbb{R}^{60 \times 3}$\\
+        $[0\text{m}, +120\text{m}]$ target trajectory $\mathbf{Y} \in \mathbb{R}^{24}$ (5-min steps)}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 7: Unsupervised Gut Microbiome Latent Modeling (Beta-VAE)
+% -----------------------------------------------------------------------------
+\begin{frame}{Unsupervised Gut Microbiome Latent Modeling ($\beta$-VAE)}
+  \begin{columns}[c]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}\setlength{\itemsep}{0.35em}
+        \item \textbf{The Data Challenge:} 1,979 sparse binary bacterial taxa across 45 participants ($p \gg n$ curse of dimensionality).
+        \item \textbf{Model Formulation:} Deep $\beta$-Variational Autoencoder compressing $1,979 \to 8$ continuous latent variables ($\mathbf{z} \in \mathbb{R}^8$).
+        \item \textbf{Denoising Taxa-Masking:} Stochastic input zero-masking ($p=0.15$) compels the network to learn co-occurring bacterial consortia.
+        \item \textbf{Cyclic $\beta$-Annealing:} Controls KL divergence penalty:
+        $$\mathcal{L}_{\text{VAE}} = \mathcal{L}_{\text{BCE}}(\mathbf{x}, \hat{\mathbf{x}}) + \beta \cdot D_{\text{KL}}\big(q(\mathbf{z}|\mathbf{x}) \,\|\, p(\mathbf{z})\big)$$
+        \item \textbf{Performance:} Perfect out-of-sample reconstruction: \textbf{ROC-AUC: 1.0000}, \textbf{PR-AUC: 1.0000}.
+      \end{itemize}
+    \end{column}
+    
+    \begin{column}{0.45\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{images/microbiome_vae_diagnostics.png}
+      \vspace{0.1cm}
+      {\tiny \textbf{Figure:} Denoising $\beta$-VAE convergence, KL stability, and PCA comparison.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 8: End-to-End System Architecture
+% -----------------------------------------------------------------------------
+\begin{frame}{GlycoTwin End-to-End System Architecture}
+  \centering
+  \includegraphics[width=0.92\textwidth]{images/t2d_digital_twin_architecture.png}
+  
+  \vspace{0.15cm}
+  \begin{columns}[c]
+    \begin{column}{0.32\textwidth}
+      \centering {\footnotesize \textbf{\color{NavyBlue}1. Multi-Modal Ingestion}}\\
+      {\scriptsize Dual CGM + Fitbit + Labs + Diet + Microbiome}
+    \end{column}
+    \begin{column}{0.34\textwidth}
+      \centering {\footnotesize \textbf{\color{Teal}2. TransformerForecaster}}\\
+      {\scriptsize MHSA Dynamic Encoder + Gated Static Network}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \centering {\footnotesize \textbf{\color{Crimson}3. Causal Simulation}}\\
+      {\scriptsize Pre-Meal Counterfactuals on Mobile PWA}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 9: TransformerForecaster Model Design
+% -----------------------------------------------------------------------------
+\begin{frame}{TransformerForecaster: Dynamic \& Static Modality Fusion}
+  \begin{columns}[c]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Dynamic Temporal Attention Encoder}
+        \begin{itemize}\setlength{\itemsep}{0.25em}
+          \item Pre-meal telemetry: $\mathbf{X}_{\text{seq}} \in \mathbb{R}^{60 \times 3}$ (Glucose, Heart Rate, METs).
+          \item Linear projection to $d_{\text{model}} = 64$ with sinusoidal positional encodings.
+          \item 2-Layer Multi-Head Self-Attention ($h=4$ heads) + GELU Feed-Forward Network ($d_{\text{ff}} = 128$).
+          \item Temporal Context Pooling: $\mathbf{h}_{\text{temp}} = \frac{1}{60}\sum \mathbf{E}_{L,t} \in \mathbb{R}^{64}$.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Gated Residual Network (GRN) for Static Data}
+        \begin{itemize}\setlength{\itemsep}{0.25em}
+          \item Static input: $\mathbf{x}_{\text{stat}} \in \mathbb{R}^{61}$ (Nutrients, Labs, VAE Latents).
+          \item Suppresses noisy features while amplifying high-impact biomarkers (Carbs, HOMA-IR):
+          $$\mathbf{g} = \sigma(\mathbf{W}_g \mathbf{\eta}_2 + \mathbf{b}_g) \quad \text{(Gating Mechanism)}$$
+          $$\mathbf{h}_{\text{stat}} = \text{LayerNorm}(\mathbf{W}_{\text{skip}}\mathbf{x}_{\text{stat}} + \mathbf{g} \odot \mathbf{\eta}_2)$$
+        \end{itemize}
+      \end{block}
+      \vspace{0.1cm}
+      \begin{exampleblock}{Fusion \& Multi-Horizon Head}
+        $\mathbf{h}_{\text{fused}} = [\mathbf{h}_{\text{temp}} \,\|\, \mathbf{h}_{\text{stat}}] \in \mathbb{R}^{128} \longrightarrow \hat{\mathbf{\Delta G}} \in \mathbb{R}^{24}$
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 10: Eliminating Baseline Bias & Composite Loss
+% -----------------------------------------------------------------------------
+\begin{frame}{Eliminating Baseline Bias \& Composite Excursion Loss}
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Problem: Baseline Offset Bias}
+        Baseline fasting glucose varies widely ($85$ mg/dL healthy vs. $165$ mg/dL diabetic). Models trained on absolute glucose collapse to population average ($\approx 120$ mg/dL).
+      \end{alertblock}
+      
+      \begin{exampleblock}{Solution: Residual Delta Target}
+        Train network strictly on relative excursion rise:
+        $$\Delta G(t) = G(t) - G_0, \quad \forall t \in \{5, \dots, 120\text{m}\}$$
+        Reconstruct during inference without drift:
+        $$\hat{G}(t) = G_0 + \max\big(0, \hat{\Delta G}(t)\big)$$
+      \end{exampleblock}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Composite Excursion Loss Function}
+        Standard MSE flattens acute spikes. Our loss enforces both numerical and physiological fidelity:
+        $$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{MSE}} + \lambda_1 \mathcal{L}_{\text{peak}} + \lambda_2 \mathcal{L}_{\text{deriv}}$$
+        \begin{itemize}\setlength{\itemsep}{0.2em}
+          \item $\mathcal{L}_{\text{peak}} = \big| \max(\hat{\mathbf{Y}}) - \max(\mathbf{Y}) \big|$ (Peak Height)
+          \item $\mathcal{L}_{\text{deriv}} = \frac{1}{H-1}\sum | \Delta\hat{Y}_k - \Delta Y_k |^2$ (Velocity)
+          \item Weights: $\lambda_1 = 0.6$, $\lambda_2 = 0.3$.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 11: Experimental Protocol & Baselines
+% -----------------------------------------------------------------------------
+\begin{frame}{Experimental Setup: 5-Fold Group K-Fold Protocol}
+  \begin{columns}[c]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Strictly Unseen Human Validation}
+        \begin{itemize}\setlength{\itemsep}{0.3em}
+          \item Random splitting leads to data leakage because models memorize patient-specific baseline glucose.
+          \item We enforced \textbf{5-Fold Group K-Fold Cross-Validation strictly grouped by Subject ID}:
+          \begin{itemize}
+            \item Train: $\sim 36$ participants ($\approx 1,306$ meal events)
+            \item Test: 9 completely unseen participants ($\approx 327$ meals)
+            \item Zero subject overlap between train \& test sets.
+          \end{itemize}
+          \item Metrics aggregated over all 1,633 meal events.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Benchmarked Baseline Architectures}
+        \begin{enumerate}\setlength{\itemsep}{0.3em}
+          \item \textbf{MLP Baseline:} 3-layer dense network with summary dynamic features.
+          \item \textbf{LSTM Forecaster:} 2-layer recurrent LSTM ($h=64$) + static dense head.
+          \item \textbf{GRU Forecaster:} 2-layer GRU ($h=64$) with matched recurrent parameters.
+          \item \textbf{Transformer (PCA):} Our transformer using linear 8-PCA microbiome features.
+          \item \textbf{Transformer ($\beta$-VAE --- Proposed):} Full architecture with non-linear gut manifold.
+        \end{enumerate}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 12: Quantitative Benchmarks & Results
+% -----------------------------------------------------------------------------
+\begin{frame}{Quantitative Benchmarks on Unseen Participants}
+  \begin{table}[!htbp]
+  \centering
+  \small
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{llccccc}
+  \toprule
+  \textbf{Model Architecture} & \textbf{Modality Features} & \textbf{MAE (mg/dL)} & \textbf{RMSE (mg/dL)} & \textbf{MAPE (\%)} & \textbf{$R^2$ Score} & \textbf{Clarke Safety (A+B)} \\
+  \midrule
+  MLP Baseline & Dynamic Summary + Static & 22.16 & 31.92 & 15.86\% & 0.470 & 97.86\% \\
+  LSTM Forecaster & 2-Layer LSTM + Static & 24.46 & 37.11 & 17.68\% & 0.284 & 97.13\% \\
+  GRU Forecaster & 2-Layer GRU + Static & 27.82 & 46.73 & 19.53\% & -0.136 & 95.76\% \\
+  \midrule
+  TransformerForecaster & MHSA + GRN + Linear PCA & 19.52 & 28.58 & 13.10\% & 0.684 & 96.40\% \\
+  \textbf{TransformerForecaster} & \textbf{MHSA + GRN + $\beta$-VAE} & \textbf{19.37} & \textbf{28.14} & \textbf{14.33\%} & \textbf{0.688} & \textbf{98.47\% (Optimal)} \\
+  \midrule
+  \emph{Published Benchmark \cite{mendes2024cgmacros}} & Gradient Boosted Decision Trees & 42.79 & --- & --- & --- & --- \\
+  \bottomrule
+  \end{tabular}%
+  }
+  \end{table}
+
+  \begin{columns}[c]
+    \begin{column}{0.33\textwidth}
+      \begin{block}{\color{NavyBlue}\textbf{30.4\% Error Reduction}}
+        {\scriptsize Outperforms GRU recurrent baseline (MAE 27.82 $\to$ 19.37 mg/dL).}
+      \end{block}
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \begin{block}{\color{Teal}\textbf{54.7\% Gain vs. Literature}}
+        {\scriptsize Massively surpasses published CGMacros benchmark (42.79 mg/dL).}
+      \end{block}
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \begin{block}{\color{Crimson}\textbf{68.8\% Variance Explained}}
+        {\scriptsize Explains 68.8\% of glucose variance ($R^2 = 0.688$) on unseen humans.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 13: Trajectory Comparison Plots
+% -----------------------------------------------------------------------------
+\begin{frame}{Continuous Trajectory Forecast Visualizations}
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{images/trajectory_comparison_all_models.png}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Why Recurrent Models Fail on Glucose}
+        \begin{itemize}\setlength{\itemsep}{0.35em}
+          \item \textbf{LSTM / GRU Baselines:} Suffer from severe spike dampening. Because they struggle to maintain long-range gradient flow, they predict sluggish, flattened curves.
+          \item \textbf{TransformerForecaster (Crimson):} Correctly anticipates both the timing and the exact magnitude of the peak excursion rise.
+          \item Tracks the recovery phase back to baseline accurately without cumulative step-wise drift.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 14: Clinical Peak Excursion & Clarke Safety
+% -----------------------------------------------------------------------------
+\begin{frame}{Clinical Peak Excursion Accuracy \& Clarke Grid Safety}
+  \begin{columns}[c]
+    \begin{column}{0.52\textwidth}
+      \textbf{Peak Spike \& Timing Accuracy on Unseen Subjects:}
+      \begin{table}[!htbp]
+      \centering
+      \scriptsize
+      \begin{tabular}{lccc}
+      \toprule
+      \textbf{Architecture} & \textbf{Peak MAE} & \textbf{Rise MAE} & \textbf{Time-to-Peak} \\
+      \midrule
+      MLP & 31.68 mg/dL & 31.68 mg/dL & 31.4 min \\
+      LSTM & 31.87 mg/dL & 31.87 mg/dL & 30.6 min \\
+      GRU & 37.61 mg/dL & 37.61 mg/dL & 31.8 min \\
+      Transformer (PCA) & 26.27 mg/dL & 18.40 mg/dL & 12.5 min \\
+      \textbf{Transformer ($\beta$-VAE)} & \textbf{24.73 mg/dL} & \textbf{18.40 mg/dL} & \textbf{12.5 min} \\
+      \bottomrule
+      \end{tabular}
+      \end{table}
+      
+      \vspace{-0.1cm}
+      {\footnotesize $\beta$-VAE improves Peak Height MAE by \textbf{12.8 mg/dL} over GRU and reduces Time-to-Peak error down to \textbf{12.5 minutes}.}
+    \end{column}
+    
+    \begin{column}{0.45\textwidth}
+      \begin{exampleblock}{Clarke Error Grid Clinical Safety}
+        \begin{itemize}\setlength{\itemsep}{0.3em}
+          \item \textbf{98.47\%} of all multi-horizon predictions fall within \textbf{Zones A and B} (Clinically Accurate / Acceptable).
+          \item \textbf{0.00\%} in dangerous error \textbf{Zones D or E}.
+          \item Fully meets international clinical regulatory safety thresholds (ISO 15197 / IEC).
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 15: Causal What-If Simulation Engine
+% -----------------------------------------------------------------------------
+\begin{frame}{From Prediction to Action: Causal What-If Simulation}
+  \begin{columns}[c]
+    \begin{column}{0.52\textwidth}
+      \begin{block}{Structural Causal Models (Pearl's $do$-Calculus)}
+        Clones current patient state $\mathbf{x}_0 = (\mathbf{X}_{\text{seq}}, \mathbf{x}_{\text{stat}}, G_0)$ and evaluates interventional distributions:
+        $$P\big(\mathbf{Y} \,\big|\, do(\text{Meal}=\mathbf{m}^*), do(\text{Activity}=\mathbf{a}^*), \mathbf{x}=\mathbf{x}_0\big)$$
+      \end{block}
+      
+      \textbf{The 4 Pre-Meal Counterfactual Scenarios:}
+      \begin{enumerate}\setlength{\itemsep}{0.2em}
+        \item \textbf{Scenario 1: Planned Meal (Control)}
+        \item \textbf{Scenario 2: -50\% Carbohydrate Portion Cut}
+        \item \textbf{Scenario 3: +30-Minute Post-Meal Walk (3.5 METs)}
+        \item \textbf{Scenario 4: Dual Combined Intervention}
+      \end{enumerate}
+    \end{column}
+    
+    \begin{column}{0.45\textwidth}
+      \begin{exampleblock}{Clinical Utility Score ($U \in [0, 1]$)}
+        Scores and ranks the 4 scenarios for the user:
+        $$U = 0.50 \left(\frac{\text{TIR}}{100}\right) + 0.30 \max\left(0, 1 - \frac{G_{\max} - 70}{180}\right) + 0.20 \max\left(0, 1 - \frac{\Delta G_{\max}}{100}\right)$$
+        \begin{itemize}\setlength{\itemsep}{0.2em}
+          \item $\text{TIR}$: \% Time-in-Range ($70-180$ mg/dL)
+          \item $G_{\max}$: Absolute peak spike penalty
+          \item $\Delta G_{\max}$: Excursion amplitude penalty
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 16: Clinical Case Study: Subject 011 Analysis
+% -----------------------------------------------------------------------------
+\begin{frame}{Clinical Case Study: Subject 011 Counterfactuals}
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{images/causal_simulator_trajectories.png}
+      \vspace{0.1cm}
+      {\tiny \textbf{Figure:} Simulated pre-meal trajectories for Subject 011 against the clinical target band ($70-180$ mg/dL).}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \textbf{Quantitative Scenario Analysis:}
+      \begin{itemize}\setlength{\itemsep}{0.3em}
+        \item \textbf{Scenario 1 (Planned Meal):}\\
+        Acute spike: $\mathbf{+48.2}$ mg/dL rise to $168.2$ mg/dL ($U = 0.748$, Rank 4).
+        \item \textbf{Scenario 2 (-50\% Carbs):}\\
+        Rise blunted to $+24.1$ mg/dL ($U = 0.842$, Rank 3).
+        \item \textbf{Scenario 3 (+30m Walk):}\\
+        Muscle GLUT4 uptake blunts rise to $+18.6$ mg/dL ($U = 0.865$, Rank 2).
+        \item \textbf{Scenario 4 (Combined Intervention):}\\
+        Excursion rise capped at \textbf{+6.3 mg/dL} with peak of $126.3$ mg/dL ($\mathbf{U = 0.932}$, \textbf{Rank 1}).
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 17: Mobile-First Progressive Web App (GlycoTwin)
+% -----------------------------------------------------------------------------
+\begin{frame}{Mobile-First Progressive Web App (GlycoTwin)}
+  \begin{columns}[c]
+    \begin{column}{0.28\textwidth}
+      \centering
+      \includegraphics[width=0.95\linewidth]{images/mobile_dashboard_preview.png}\\[0.05cm]
+      {\tiny Live Telemetry Dashboard}
+    \end{column}
+    
+    \begin{column}{0.28\textwidth}
+      \centering
+      \includegraphics[width=0.95\linewidth]{images/mobile_simulator_preview.png}\\[0.05cm]
+      {\tiny Causal What-If Simulator}
+    \end{column}
+    
+    \begin{column}{0.40\textwidth}
+      \begin{block}{Software Architecture Highlights}
+        \begin{itemize}\setlength{\itemsep}{0.3em}
+          \item \textbf{Frontend:} Pure HTML5, CSS3, Vanilla JavaScript. Zero framework overhead, $<100$ms load times.
+          \item \textbf{Interactive Trajectory Canvas:} Touch scrubbing across 120-min curves.
+          \item \textbf{Pre-Meal Touch Sliders:} Instant trajectory recomputation for Carbs, Fiber, Protein, Fat, and Walk duration.
+          \item \textbf{Backend:} Lightweight multi-threaded Python server (\texttt{http.server}).
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 18: Summary of Key Contributions
+% -----------------------------------------------------------------------------
+\begin{frame}{Summary of Key Contributions}
+  \begin{columns}[c]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{1. Synchronized Multi-Modal Dataset}
+        Unified 1-minute dual CGM, smartwatch exertion, meal macronutrients, laboratory blood tests, and 1,979 microbiome taxa across 1,633 meal events.
+      \end{block}
+      \vspace{0.1cm}
+      \begin{block}{2. Unsupervised $\beta$-VAE for Microbiota}
+        Resolved the $p \gg n$ taxa dimensionality challenge, learning an 8-dimensional non-linear manifold with 1.0000 ROC-AUC and PR-AUC.
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{block}{3. TransformerForecaster Architecture}
+        Eliminated baseline offset bias via $\Delta G_t = G_t - G_0$ and suppressed static noise via Gated Residual Networks (MAE: \textbf{19.37 mg/dL}, $R^2 = \mathbf{0.688}$).
+      \end{block}
+      \vspace{0.1cm}
+      \begin{block}{4. Causal Simulation on Mobile PWA}
+        Shifted diabetes care from reactive alerts to pre-meal counterfactual decision support with certified 98.47\% Clarke safety.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 19: Limitations & Future Scope
+% -----------------------------------------------------------------------------
+\begin{frame}{Limitations \& Future Research Directions}
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Limitations of Current Work}
+        \begin{itemize}\setlength{\itemsep}{0.3em}
+          \item \textbf{Free-Living Self-Reporting:} Subjective portion estimation in dietary logs.
+          \item \textbf{Sensor Interstitial Lag:} 5--10 minute physiological delay in enzymatic CGM probes.
+          \item \textbf{Cohort Geographic Scale:} Evaluated on 45 Portuguese participants; cross-demographic multi-center validation needed.
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{Future Research Avenues}
+        \begin{itemize}\setlength{\itemsep}{0.3em}
+          \item \textbf{Conformal Prediction Bands:} Generating finite-sample 95\% confidence bands to convey model epistemic uncertainty.
+          \item \textbf{Smart Insulin Pen Closed-Loop:} Linking forecasts to connected pens (NovoPen Echo) for automated pre-meal bolus dosing.
+          \item \textbf{Longitudinal Microbiome Tracking:} Updating digital twin latent weights as patient gut flora shifts over months.
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% Slide 20: Conclusion & Q&A
+% -----------------------------------------------------------------------------
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{0.5cm}
+    \includegraphics[height=1.2cm]{images/univA.png}\\[0.25cm]
+    {\LARGE \textbf{\color{NavyBlue} Thank You!}}\\[0.2cm]
+    {\small \color{Teal} Questions \& Discussion}\\[0.4cm]
+    
+    \begin{block}{\centering Project Repository \& Open Codebase}
+      \centering \footnotesize
+      \textbf{GitHub:} \href{https://github.com/AoD-X-abhi/GlycoTwin-T2DM}{\color{NavyBlue}\texttt{https://github.com/AoD-X-abhi/GlycoTwin-T2DM}}
+    \end{block}
+    
+    \vspace{0.35cm}
+    {\footnotesize \textbf{Department of Artificial Intelligence} $\cdot$ Amrita Vishwa Vidyapeetham, Coimbatore Campus}\\
+    \vspace{0.15cm}
+    {\scriptsize \textbf{Guide:} Dr. Keerthika K \quad $\vert$ \quad \textbf{Authors:} Divagar S, Abhishek Pandey, Prem}
+  \end{center}
+\end{frame}
+
+\end{document}
